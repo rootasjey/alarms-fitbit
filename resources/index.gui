@@ -1,0 +1,28 @@
+<svg>
+  <rect id="background">
+    <g id="clock">
+      <g id="hours-digits">
+        <text id="hours-digits-0" class="clock" x="60" y="30" opacity=".5" />
+        <text id="hours-digits-1" class="clock" x="60" y="150" opacity="1" />
+        <text id="hours-digits-2" class="clock" x="60" y="270" opacity=".5" />
+        <text id="hours-digits-3" class="clock" x="60" y="390" opacity=".5" />
+      </g>
+
+      <text id="digits-separator" x="170" y="140">:</text>
+
+      <g id="minutes-digits">
+        <text id="minutes-digits-0" class="clock" x="190" y="30" opacity=".5" />
+        <text id="minutes-digits-1" class="clock" x="190" y="150" opacity="1" />
+        <text id="minutes-digits-2" class="clock" x="190" y="270" opacity=".5" />
+        <text id="minutes-digits-3" class="clock" x="190" y="390" opacity=".5" />
+      </g>
+
+      <g id="seconds-digits">
+        <text id="seconds-digits-0" class="seconds" x="290" y="120" opacity=".5" />
+        <text id="seconds-digits-1" class="seconds" x="290" y="150" opacity="1" />
+        <text id="seconds-digits-2" class="seconds" x="290" y="180" opacity=".5" />
+        <text id="seconds-digits-3" class="seconds" x="290" y="210" opacity="0" />
+      </g>
+    </g>
+  </rect>
+</svg>

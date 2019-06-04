@@ -1,0 +1,26 @@
+#background {
+  width: 100%;
+  height: 100%;
+  fill: black;
+}
+
+#clock {
+  text-anchor: end;
+}
+
+.clock {
+  fill: white;
+  font-size: 100;
+  font-family: "System-Light";
+}
+
+#digits-separator {
+  fill: white;
+  font-size: 100;
+  font-family: "System-Light";
+}
+
+.seconds {
+  fill: white;
+  font-family: "System-Light";
+}
