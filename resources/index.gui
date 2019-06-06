@@ -1,5 +1,12 @@
 <svg>
   <rect id="background">
+    <g id="battery">
+      <circle id="battery__circle-0" cx="10" cy="10" r="5" fill="#f1c40f" />
+      <circle id="battery__circle-1" cx="10" cy="25" r="5" fill="#f1c40f" />
+      <circle id="battery__circle-2" cx="10" cy="40" r="5" fill="#f1c40f" />
+      <circle id="battery__circle-3" cx="10" cy="55" r="5" fill="#f1c40f" />
+    </g>
+
     <g id="date" pointer-events="visible">
       <text id="date__number" class="date" x="10" y="200" opacity=".5" />
       <text id="date__day" class="date" x="10" y="220" opacity=".5" />

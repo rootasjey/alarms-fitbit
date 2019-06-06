@@ -3,11 +3,18 @@ import clock, { TickEvent } from 'clock'
 import { formatHours } from '../common/format'
 import { initClockDigits } from './digits'
 
+import {
+  initDateElements,
+  updateDateLazily,
+  updateDate,
+  addTapEventOnDate
+} from './date';
+
+import { initBatteryElements, updateBatteryLazily } from './battery';
+import { initDigitsColors } from './colors';
 import { startHoursAnimation, updateHoursDigits } from './hours'
 import { startMinutesAnimation, updateMinutesDigits } from './minutes'
 import { startSecondsAnimation, updateSecondsDigits } from './seconds'
-import { initDigitsColors } from './colors';
-import { initDateElements, updateDateLazyly, updateDate, addTapEventOnDate } from './date';
 
 clock.granularity = 'seconds'
 
@@ -21,6 +28,7 @@ const clockDigits: ClockDigits = {
 initClockDigits(clockDigits)
 initDigitsColors(clockDigits)
 initDateElements()
+initBatteryElements()
 
 updateDate()
 addTapEventOnDate()
@@ -30,7 +38,8 @@ clock.ontick = (event: TickEvent) => {
   const minutes = event.date.getMinutes()
   const seconds = event.date.getSeconds()
 
-  updateDateLazyly(seconds)
+  updateDateLazily(seconds)
+  updateBatteryLazily(seconds)
 
   updateHoursDigits(clockDigits.hours, hours)
   updateMinutesDigits(clockDigits.minutes, minutes)

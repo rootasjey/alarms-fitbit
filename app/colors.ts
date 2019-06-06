@@ -1,6 +1,6 @@
 const COLORS = {
   foreground: '#f1c40f',
-  background: '#ffffff'
+  background: '#ffffff',
 }
 
 export const getBackgroundColor = () => COLORS.background

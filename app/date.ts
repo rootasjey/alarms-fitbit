@@ -1,6 +1,6 @@
 import document from 'document';
 
-const DATE_ELEM: DateElements = {
+const ELEMENTS: DateElements = {
   day: undefined,
   number: undefined,
   month: undefined,
@@ -12,7 +12,7 @@ export const addTapEventOnDate = () => {
   if(!container) { return }
 
   container.onclick = () => {
-    const { day, month, number, numberMonth } = DATE_ELEM
+    const { day, month, number, numberMonth } = ELEMENTS
     if (!day || !month || !number || !numberMonth) return
 
     if (numberMonth.style.visibility === 'visible') {
@@ -42,10 +42,10 @@ export const initDateElements = () => {
   const month = document.getElementById('date__month')
   const numberMonth = document.getElementById('date__number-month')
 
-  DATE_ELEM.day = day ? day : undefined
-  DATE_ELEM.number = number ? number : undefined
-  DATE_ELEM.month = month ? month : undefined
-  DATE_ELEM.numberMonth = numberMonth ? numberMonth : undefined
+  ELEMENTS.day = day ? day : undefined
+  ELEMENTS.number = number ? number : undefined
+  ELEMENTS.month = month ? month : undefined
+  ELEMENTS.numberMonth = numberMonth ? numberMonth : undefined
 }
 
 export const updateDate = () => {
@@ -54,10 +54,10 @@ export const updateDate = () => {
   const month = numberToMonth(today.getMonth())
   const number = today.getDate()
 
-  if (DATE_ELEM.day) { DATE_ELEM.day.text = day }
-  if (DATE_ELEM.month) { DATE_ELEM.month.text = month }
-  if (DATE_ELEM.number) { DATE_ELEM.number.text = `${number}` }
-  if (DATE_ELEM.numberMonth) { DATE_ELEM.numberMonth.text = `${number}/${today.getMonth() + 1}` }
+  if (ELEMENTS.day) { ELEMENTS.day.text = day }
+  if (ELEMENTS.month) { ELEMENTS.month.text = month }
+  if (ELEMENTS.number) { ELEMENTS.number.text = `${number}` }
+  if (ELEMENTS.numberMonth) { ELEMENTS.numberMonth.text = `${number}/${today.getMonth() + 1}` }
 }
 
 function numberToDay(n: number) {
@@ -74,7 +74,7 @@ function numberToDay(n: number) {
   return days[n]
 }
 
-export const updateDateLazyly = (seconds: number) => {
+export const updateDateLazily = (seconds: number) => {
   if (seconds % 5 !== 0) { return }
   updateDate()
 }
