@@ -12,8 +12,8 @@ export const setForegroundColor = (newColor: string) => COLORS.foreground = newC
  * @param clockDigits Array of DOM elements representing clock digits.
  */
 export const initDigitsColors = (clockDigits: ClockDigits) => {
-  clockDigits.left.some(setColorOnMiddleHourMinutes)
-  clockDigits.right.some(setColorOnMiddleHourMinutes)
+  clockDigits.hours.some(setColorOnMiddleHourMinutes)
+  clockDigits.minutes.some(setColorOnMiddleHourMinutes)
 
   setColorSeparator(clockDigits.separator)
 }

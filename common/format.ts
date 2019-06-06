@@ -1,4 +1,4 @@
-import { preferences } from 'user-settings';
+import { preferences } from 'user-settings'
 
 export const formatDigits = (num: number) => {
   return num.toString().length > 1 ? num.toString() : `0${num}`

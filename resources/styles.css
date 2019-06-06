@@ -14,6 +14,11 @@
   font-family: "System-Light";
 }
 
+.date {
+  fill: white;
+  font-size: 20;
+}
+
 #digits-separator {
   fill: white;
   font-size: 100;

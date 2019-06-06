@@ -12,13 +12,13 @@ export const initClockDigits = (clockDigits: ClockDigits) => {
   numbers.map((value) => {
     const digit = document.getElementById(`hours-digits-${value}`)
 
-    if (digit) { clockDigits.left.push(digit); }
+    if (digit) { clockDigits.hours.push(digit); }
   })
 
   numbers.map((value) => {
     const digit = document.getElementById(`minutes-digits-${value}`)
 
-    if (digit) { clockDigits.right.push(digit) }
+    if (digit) { clockDigits.minutes.push(digit) }
   })
 
   numbers.map((value) => {
