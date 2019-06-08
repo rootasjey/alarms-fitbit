@@ -55,6 +55,37 @@ export function createDigitsAnimation(config: CreateDigitsAnimationConfig) {
   }
 }
 
+export function fadeIn(elem: Element | null) {
+  if (!elem) return
+
+  const opacityStep = .05
+
+  const animation = (timestamp: number) => {
+    if (elem.style.opacity >= 1) return
+    elem.style.opacity += opacityStep
+
+    requestAnimationFrame(animation)
+  }
+
+  requestAnimationFrame(animation)
+}
+
+export function fadeOut(elem: Element | null) {
+  if (!elem) return
+
+  const opacityStep = .05
+
+  const animation = (timestamp: number) => {
+    if (elem.style.opacity <= 0) return
+    const newOpacity = (elem.style.opacity - opacityStep).toFixed(2)
+    elem.style.opacity = parseFloat(newOpacity)
+
+    requestAnimationFrame(animation)
+  }
+
+  requestAnimationFrame(animation)
+}
+
 function getNextOpacity(config: GetNextOpacityConfig) {
   const { currentOpacity, finalType, hideAfterAnimation } = config
 

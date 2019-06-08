@@ -12,7 +12,7 @@ import {
 
 import { initBatteryElements, updateBatteryLazily } from './battery';
 import { initDigitsColors } from './colors';
-import { startHoursAnimation, updateHoursDigits } from './hours'
+import { addTapEventOnHours, startHoursAnimation, updateHoursDigits } from './hours'
 import { startMinutesAnimation, updateMinutesDigits } from './minutes'
 import { startSecondsAnimation, updateSecondsDigits } from './seconds'
 
@@ -32,6 +32,7 @@ initBatteryElements()
 
 updateDate()
 addTapEventOnDate()
+addTapEventOnHours()
 
 clock.ontick = (event: TickEvent) => {
   const hours = formatHours(event.date.getHours())

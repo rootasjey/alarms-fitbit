@@ -4,40 +4,18 @@ import { FinalType } from '../common/enumerations'
 import { formatDigits, formatHours } from '../common/format'
 import { createDigitsAnimation } from './animationFactory'
 import { updateDigits } from './digits'
+import { toggleDate } from './date';
+import { toggleBattery } from './battery';
 
+/** Toggle date and battery when tapping on hours. */
+export const addTapEventOnHours = () => {
+  const rect = document.getElementById('actions-hours')
+  if (!rect) return
 
-/** Returns next animation type according to the current Y coordinate. */
-function getNextAnimationType(y: number) {
-  switch (y) {
-    case 30:
-      return FinalType.hide
-    case 150:
-      return FinalType.background
-    case 270:
-      return FinalType.foreground
-    case 390:
-      return FinalType.background
-
-    default:
-      return FinalType.hide
-  }
-}
-
-/** Returns next Y coordinate according to the current one. */
-function getNextY(y: number) {
-  switch (y) {
-    case 30:
-      return 0
-    case 150:
-      return 30
-    case 270:
-      return 150
-    case 390:
-      return 270
-
-    default:
-      return 390
-  }
+  rect.addEventListener('click', () => {
+    toggleDate()
+    toggleBattery()
+  })
 }
 
 /** Start minutes animation. */
@@ -87,4 +65,38 @@ export const updateHoursDigits = (arrayDigits: Element[], value: number = 0) => 
   const nextValue = formatHours(value + 1)
 
   updateDigits(arrayDigits, [prevValue, value, nextValue, currPlusOneValue])
+}
+
+/** Returns next animation type according to the current Y coordinate. */
+function getNextAnimationType(y: number) {
+  switch (y) {
+    case 30:
+      return FinalType.hide
+    case 150:
+      return FinalType.background
+    case 270:
+      return FinalType.foreground
+    case 390:
+      return FinalType.background
+
+    default:
+      return FinalType.hide
+  }
+}
+
+/** Returns next Y coordinate according to the current one. */
+function getNextY(y: number) {
+  switch (y) {
+    case 30:
+      return 0
+    case 150:
+      return 30
+    case 270:
+      return 150
+    case 390:
+      return 270
+
+    default:
+      return 390
+  }
 }

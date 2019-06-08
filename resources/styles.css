@@ -4,6 +4,10 @@
   fill: black;
 }
 
+#battery {
+  visibility: visible;
+}
+
 #clock {
   text-anchor: end;
 }
@@ -12,6 +16,10 @@
   fill: white;
   font-size: 100;
   font-family: "System-Light";
+}
+
+#date {
+  visibility: visible;
 }
 
 .date {

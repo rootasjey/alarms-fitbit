@@ -1,10 +1,14 @@
 import document from 'document';
+import { fadeIn, fadeOut } from './animationFactory';
 
 const ELEMENTS: DateElements = {
-  day: undefined,
-  number: undefined,
-  month: undefined,
-  numberMonth: undefined,
+  container: null,
+  children : {
+    day: null,
+    number: null,
+    month: null,
+    numberMonth: null,
+  },
 }
 
 export const addTapEventOnDate = () => {
@@ -12,7 +16,7 @@ export const addTapEventOnDate = () => {
   if(!container) { return }
 
   container.onclick = () => {
-    const { day, month, number, numberMonth } = ELEMENTS
+    const { day, month, number, numberMonth } = ELEMENTS.children
     if (!day || !month || !number || !numberMonth) return
 
     if (numberMonth.style.visibility === 'visible') {
@@ -37,15 +41,34 @@ export const addTapEventOnDate = () => {
 }
 
 export const initDateElements = () => {
-  const day = document.getElementById('date__day')
-  const number = document.getElementById('date__number')
-  const month = document.getElementById('date__month')
-  const numberMonth = document.getElementById('date__number-month')
+  ELEMENTS.container = document.getElementById('date')
+  ELEMENTS.children.day = document.getElementById('date__day')
+  ELEMENTS.children.number = document.getElementById('date__number')
+  ELEMENTS.children.month = document.getElementById('date__month')
+  ELEMENTS.children.numberMonth = document.getElementById('date__number-month')
+}
 
-  ELEMENTS.day = day ? day : undefined
-  ELEMENTS.number = number ? number : undefined
-  ELEMENTS.month = month ? month : undefined
-  ELEMENTS.numberMonth = numberMonth ? numberMonth : undefined
+export const toggleDate = () => {
+  const { container } = ELEMENTS
+  if (!container) return
+
+  const { visibility } = container.style
+
+  // TODO: change test variable with settings.
+  if (visibility === 'visible') {
+    const { children } = ELEMENTS
+
+    for (const key of Object.keys(children)) {
+      fadeOut(children[key])
+    }
+
+  } else {
+    const { children } = ELEMENTS
+
+    for (const key of Object.keys(children)) {
+      fadeIn(children[key])
+    }
+  }
 }
 
 export const updateDate = () => {
@@ -54,10 +77,10 @@ export const updateDate = () => {
   const month = numberToMonth(today.getMonth())
   const number = today.getDate()
 
-  if (ELEMENTS.day) { ELEMENTS.day.text = day }
-  if (ELEMENTS.month) { ELEMENTS.month.text = month }
-  if (ELEMENTS.number) { ELEMENTS.number.text = `${number}` }
-  if (ELEMENTS.numberMonth) { ELEMENTS.numberMonth.text = `${number}/${today.getMonth() + 1}` }
+  if (ELEMENTS.children.day) { ELEMENTS.children.day.text = day }
+  if (ELEMENTS.children.month) { ELEMENTS.children.month.text = month }
+  if (ELEMENTS.children.number) { ELEMENTS.children.number.text = `${number}` }
+  if (ELEMENTS.children.numberMonth) { ELEMENTS.children.numberMonth.text = `${number}/${today.getMonth() + 1}` }
 }
 
 function numberToDay(n: number) {

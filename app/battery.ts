@@ -1,6 +1,7 @@
 import document from 'document'
 import { battery } from 'power'
 import { getForegroundColor, getBackgroundColor } from './colors';
+import { fadeIn, fadeOut } from './animationFactory';
 
 const ELEMENTS: BatteryElements = {
   container: null,
@@ -25,6 +26,29 @@ export const initBatteryElements = () => {
   ELEMENTS.circles.circle1 = document.getElementById('battery__circle-1')
   ELEMENTS.circles.circle2 = document.getElementById('battery__circle-2')
   ELEMENTS.circles.circle3 = document.getElementById('battery__circle-3')
+}
+
+export const toggleBattery = () => {
+  const { container } = ELEMENTS
+  if (!container) return
+
+  const { visibility } = container.style
+
+  // TODO: change test variable with settings.
+  if (visibility === 'visible') {
+    const { circles } = ELEMENTS
+
+    for (const key of Object.keys(circles)) {
+      fadeOut(circles[key])
+    }
+
+  } else {
+    const { circles } = ELEMENTS
+
+    for (const key of Object.keys(circles)) {
+      fadeIn(circles[key])
+    }
+  }
 }
 
 export const updateBattery = () => {

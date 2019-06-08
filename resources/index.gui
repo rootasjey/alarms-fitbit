@@ -39,5 +39,9 @@
         <text id="seconds-digits-3" class="seconds" x="290" y="210" opacity="0" />
       </g>
     </g>
+
+    <g id="actions-container">
+      <rect id="actions-hours" x="60" y="80" height="80" width="100" fill="red" opacity="0" pointer-events="visible" />
+    </g>
   </rect>
 </svg>
