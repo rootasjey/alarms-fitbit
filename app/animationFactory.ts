@@ -62,7 +62,9 @@ export function fadeIn(elem: Element | null) {
 
   const animation = (timestamp: number) => {
     if (elem.style.opacity >= 1) return
-    elem.style.opacity += opacityStep
+
+    const newOpacity = (elem.style.opacity + opacityStep).toFixed(2)
+    elem.style.opacity = parseFloat(newOpacity)
 
     requestAnimationFrame(animation)
   }
@@ -77,6 +79,7 @@ export function fadeOut(elem: Element | null) {
 
   const animation = (timestamp: number) => {
     if (elem.style.opacity <= 0) return
+
     const newOpacity = (elem.style.opacity - opacityStep).toFixed(2)
     elem.style.opacity = parseFloat(newOpacity)
 

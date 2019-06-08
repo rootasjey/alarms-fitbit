@@ -1,5 +1,6 @@
 import document from 'document';
 import { fadeIn, fadeOut } from './animationFactory';
+import { getSettingsValue, SettingsKeys } from './settings';
 
 const ELEMENTS: DateElements = {
   container: null,
@@ -50,17 +51,18 @@ export const initDateElements = () => {
 
 export const toggleDate = () => {
   const { container } = ELEMENTS
-  if (!container) return
+  if (!container) return 'hidden'
 
-  const { visibility } = container.style
+  const visibility = getSettingsValue(SettingsKeys.displayBatteryDate)
 
-  // TODO: change test variable with settings.
-  if (visibility === 'visible') {
+  if (visibility) {
     const { children } = ELEMENTS
 
     for (const key of Object.keys(children)) {
       fadeOut(children[key])
     }
+
+    return 'hidden'
 
   } else {
     const { children } = ELEMENTS
@@ -68,6 +70,8 @@ export const toggleDate = () => {
     for (const key of Object.keys(children)) {
       fadeIn(children[key])
     }
+
+    return 'visible'
   }
 }
 

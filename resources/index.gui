@@ -43,6 +43,7 @@
     <g id="actions-container">
       <rect id="actions-hours" x="60" y="80" height="80" width="100" fill="red" opacity="0" pointer-events="visible" />
       <rect id="actions-date" x="0" y="170" height="80" width="60" fill="red" opacity="0" pointer-events="visible" />
+      <rect id="actions-top-clock" x="60" y="0" height="70" width="230" fill="red" opacity="0" pointer-events="visible" />
     </g>
   </rect>
 </svg>

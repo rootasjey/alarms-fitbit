@@ -1,7 +1,7 @@
 import clock, { TickEvent } from 'clock'
 
 import { formatHours } from '../common/format'
-import { initClockDigits } from './digits'
+import { initClockDigits, addTapEventOnTopDigits } from './digits'
 
 import {
   initDateElements,
@@ -14,7 +14,9 @@ import { initBatteryElements, updateBatteryLazily } from './battery';
 import { initDigitsColors } from './colors';
 import { addTapEventOnHours, startHoursAnimation, updateHoursDigits } from './hours'
 import { startMinutesAnimation, updateMinutesDigits } from './minutes'
-import { startSecondsAnimation, updateSecondsDigits } from './seconds'
+import { startSecondsAnimation, updateSecondsDigits, checkSecondsPosition } from './seconds'
+import { initSettings, getSettingsValue, SettingsKeys } from './settings';
+import { display } from 'display';
 
 clock.granularity = 'seconds'
 
@@ -30,17 +32,28 @@ initDigitsColors(clockDigits)
 initDateElements()
 initBatteryElements()
 
+initSettings((settings: Settings) => {
+  // console.log('settings chnged')
+})
+
 updateDate()
 addTapEventOnDate()
 addTapEventOnHours()
+addTapEventOnTopDigits()
 
 clock.ontick = (event: TickEvent) => {
   const hours = formatHours(event.date.getHours())
   const minutes = event.date.getMinutes()
   const seconds = event.date.getSeconds()
 
-  updateDateLazily(seconds)
-  updateBatteryLazily(seconds)
+  if (getSettingsValue(SettingsKeys.displayBatteryDate)) {
+    updateDateLazily(seconds)
+    updateBatteryLazily(seconds)
+  }
+
+  if (seconds % 10 === 0) {
+    checkSecondsPosition()
+  }
 
   updateHoursDigits(clockDigits.hours, hours)
   updateMinutesDigits(clockDigits.minutes, minutes)
@@ -50,3 +63,10 @@ clock.ontick = (event: TickEvent) => {
   startMinutesAnimation(seconds)
   startHoursAnimation(minutes, seconds)
 }
+
+display.addEventListener('change', () => {
+  if (display.on) {
+    checkSecondsPosition()
+    return
+  }
+})

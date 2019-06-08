@@ -2,6 +2,15 @@ import document from 'document'
 
 import { formatDigits } from '../common/format'
 
+export const addTapEventOnTopDigits = () => {
+  const rect = document.getElementById('actions-top-clock')
+  if (!rect) return
+
+  rect.addEventListener('click', () => {
+    // TODO
+  })
+}
+
 /**
  * Retrieve DOM elements to display the clock.
  * @param clockDigits Empty array that will contain DOM elements

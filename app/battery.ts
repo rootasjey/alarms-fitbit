@@ -2,6 +2,7 @@ import document from 'document'
 import { battery } from 'power'
 import { getForegroundColor, getBackgroundColor } from './colors';
 import { fadeIn, fadeOut } from './animationFactory';
+import { getSettingsValue, SettingsKeys } from './settings';
 
 const ELEMENTS: BatteryElements = {
   container: null,
@@ -30,17 +31,18 @@ export const initBatteryElements = () => {
 
 export const toggleBattery = () => {
   const { container } = ELEMENTS
-  if (!container) return
+  if (!container) return 'hidden'
 
-  const { visibility } = container.style
+  const visibility = getSettingsValue(SettingsKeys.displayBatteryDate)
 
-  // TODO: change test variable with settings.
-  if (visibility === 'visible') {
+  if (visibility) {
     const { circles } = ELEMENTS
 
     for (const key of Object.keys(circles)) {
       fadeOut(circles[key])
     }
+
+    return 'hidden'
 
   } else {
     const { circles } = ELEMENTS
@@ -48,6 +50,8 @@ export const toggleBattery = () => {
     for (const key of Object.keys(circles)) {
       fadeIn(circles[key])
     }
+
+    return 'visible'
   }
 }
 

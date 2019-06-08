@@ -6,6 +6,7 @@ import { createDigitsAnimation } from './animationFactory'
 import { updateDigits } from './digits'
 import { toggleDate } from './date';
 import { toggleBattery } from './battery';
+import { updateSettings } from './settings';
 
 /** Toggle date and battery when tapping on hours. */
 export const addTapEventOnHours = () => {
@@ -13,8 +14,13 @@ export const addTapEventOnHours = () => {
   if (!rect) return
 
   rect.addEventListener('click', () => {
-    toggleDate()
-    toggleBattery()
+    const dateVisibility = toggleDate()
+    const batteryVisibility = toggleBattery()
+
+    updateSettings({
+      key: 'displayBatteryDate',
+      value: dateVisibility === 'visible' && batteryVisibility === 'visible'
+    })
   })
 }
 
