@@ -12,10 +12,10 @@ const ELEMENTS: DateElements = {
 }
 
 export const addTapEventOnDate = () => {
-  const container = document.getElementById('date')
-  if(!container) { return }
+  const rect = document.getElementById('actions-date')
+  if(!rect) { return }
 
-  container.onclick = () => {
+  rect.onclick = () => {
     const { day, month, number, numberMonth } = ELEMENTS.children
     if (!day || !month || !number || !numberMonth) return
 

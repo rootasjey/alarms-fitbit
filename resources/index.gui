@@ -7,7 +7,7 @@
       <circle id="battery__circle-3" cx="10" cy="55" r="5" fill="#f1c40f" />
     </g>
 
-    <g id="date" pointer-events="visible">
+    <g id="date">
       <text id="date__number" class="date" x="10" y="200" opacity=".5" />
       <text id="date__day" class="date" x="10" y="220" opacity=".5" />
       <text id="date__month" class="date" x="10" y="240" opacity=".5" />
@@ -42,6 +42,7 @@
 
     <g id="actions-container">
       <rect id="actions-hours" x="60" y="80" height="80" width="100" fill="red" opacity="0" pointer-events="visible" />
+      <rect id="actions-date" x="0" y="170" height="80" width="60" fill="red" opacity="0" pointer-events="visible" />
     </g>
   </rect>
 </svg>
