@@ -1,17 +1,26 @@
 import document from 'document'
 import { goals, today } from 'user-activity'
 import { getForegroundColor, getBackgroundColor } from './colors'
-import { getSettingsValue, SettingsKeys } from './settings';
-import { animateIntValue, fadeOut } from './animationFactory';
-import { HeartRateSensor } from 'heart-rate';
+import { getSettingsValue, SettingsKeys } from './settings'
+import { animateIntValue, fadeOut } from './animationFactory'
+import { HeartRateSensor } from 'heart-rate'
 
 const ACTIVITIES_LIST = [
   'steps',
+  'elevationGain',
   'hr',
 ]
 
-export const hideActivities = () => {
-  ACTIVITIES_LIST.map((activity) => {
+const ACTIVITIES_LIST2 = [
+  'activeMinutes',
+  'calories',
+  'distance',
+]
+
+export const hideActivities = (listNumber: number) => {
+  const list = listNumber === 1 ? ACTIVITIES_LIST : ACTIVITIES_LIST2
+
+  list.map((activity) => {
     const textElem = document.getElementById(`activity__${activity}-text`)
     const iconElem = document.getElementById(`activity__${activity}-icon`)
     if (!textElem || !iconElem) return
@@ -21,7 +30,7 @@ export const hideActivities = () => {
   })
 
   setTimeout(() => {
-    const rectActivities = document.getElementById('activity')
+    const rectActivities = document.getElementById(`activity-${listNumber}`)
 
     if (!rectActivities) return
 
@@ -30,17 +39,19 @@ export const hideActivities = () => {
   }, 500);
 }
 
-export const showActivities = () => {
-  const rectActivities = document.getElementById('activity')
+export const showActivities = (listNumber: number) => {
+  const list = listNumber === 1 ? ACTIVITIES_LIST : ACTIVITIES_LIST2
+  const rectActivities = document.getElementById(`activity-${listNumber}`)
 
   if (!rectActivities) return
 
   rectActivities.style.opacity = 1
   rectActivities.style.visibility = 'visible'
 
-  ACTIVITIES_LIST.map((activity) => {
+  list.map((activity) => {
     const textElem = document.getElementById(`activity__${activity}-text`)
     const iconElem = document.getElementById(`activity__${activity}-icon`)
+
     if (!textElem || !iconElem) return
 
     textElem.style.opacity = 1
@@ -49,30 +60,55 @@ export const showActivities = () => {
 }
 
 export const showActivitiesIfSettings = () => {
-  const activityShouldBeVisible = getSettingsValue(SettingsKeys.displayActivities)
-
-  const elem = document.getElementById('activity')
-  if (!elem) return
-
-  const activityIsVisible = elem.style.opacity !== 0 && elem.style.visibility !== 'hidden'
-
-  // console.log(`elem.style.opacity: ${elem.style.opacity}`)
-  // console.log(`elem.style.visibility: ${elem.style.visibility}`)
-  // console.log(`activityShouldBeVisible: ${activityShouldBeVisible} activityIsVisible: ${activityIsVisible}`)
-
-  if (activityShouldBeVisible === activityIsVisible) {
-    return
-  }
-
-  if (activityShouldBeVisible) { showActivities() }
-  else { hideActivities() }
+  showTopActivitiesIfSettings()
+  showBottomActivitiesIfSettings()
 }
 
 export const updateActivities = (hr?: HeartRateSensor) => {
-  ACTIVITIES_LIST.map((activity) => {
-    if (activity === 'hr') { updateHR(hr); return }
-    updateActivityValue(activity)
-  })
+  if (getSettingsValue(SettingsKeys.displayActivities)) {
+    ACTIVITIES_LIST.map((activity) => {
+      if (activity === 'hr') { updateHR(hr); return }
+      updateActivityValue(activity)
+    })
+  }
+
+  if (getSettingsValue(SettingsKeys.displayActivities2)) {
+    ACTIVITIES_LIST2.map((activity) => {
+      updateActivityValue(activity)
+    })
+  }
+}
+
+function showTopActivitiesIfSettings() {
+  const activitiesTopShouldBeVisible = getSettingsValue(SettingsKeys.displayActivities)
+
+  const elem = document.getElementById('activity-1')
+  if (!elem) return
+
+  const activitiesTopAreVisible = elem.style.opacity !== 0 && elem.style.visibility !== 'hidden'
+
+  if (activitiesTopShouldBeVisible === activitiesTopAreVisible) {
+    return
+  }
+
+  if (activitiesTopShouldBeVisible) { showActivities(1) }
+  else { hideActivities(1) }
+}
+
+function showBottomActivitiesIfSettings() {
+  const activitiesBottomShouldBeVisible = getSettingsValue(SettingsKeys.displayActivities2)
+
+  const elem = document.getElementById('activity-2')
+  if (!elem) return
+
+  const activitiesBottomAreVisible = elem.style.opacity !== 0 && elem.style.visibility !== 'hidden'
+
+  if (activitiesBottomShouldBeVisible === activitiesBottomAreVisible) {
+    return
+  }
+
+  if (activitiesBottomShouldBeVisible) { showActivities(2) }
+  else { hideActivities(2) }
 }
 
 function updateActivityValue(activity: string) {

@@ -22,7 +22,7 @@ import {
   showDateIfSettings
 } from './date'
 
-import { initClockDigits, addTapEventOnTopDigits } from './digits'
+import { initClockDigits, addTapEventOnTopDigits, addTapEventOnBottomDigits } from './digits'
 import { addTapEventOnHours, startHoursAnimation, updateHoursDigits } from './hours'
 import { startMinutesAnimation, updateMinutesDigits } from './minutes'
 import { startSecondsAnimation, updateSecondsDigits, checkSecondsPosition } from './seconds'
@@ -54,6 +54,7 @@ updateDate()
 addTapEventOnDate()
 addTapEventOnHours()
 addTapEventOnTopDigits()
+addTapEventOnBottomDigits()
 
 showActivitiesIfSettings()
 showBatteryIfSettings()

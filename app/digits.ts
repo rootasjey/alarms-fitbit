@@ -4,33 +4,18 @@ import { formatDigits } from '../common/format'
 import { getSettingsValue, SettingsKeys, updateSettings } from './settings';
 import { hideActivities, showActivities, updateActivities } from './activities';
 
+export const addTapEventOnBottomDigits = () => {
+  const rect = document.getElementById('actions-bottom-clock')
+  if (!rect) return
+
+  rect.addEventListener('click', () => { onTapRectActivities(2) })
+}
+
 export const addTapEventOnTopDigits = () => {
   const rect = document.getElementById('actions-top-clock')
   if (!rect) return
 
-  rect.addEventListener('click', () => {
-    const rectActivities = document.getElementById('activity')
-    const visibility = getSettingsValue(SettingsKeys.displayActivities)
-
-    const newVisibility = !visibility
-
-    if (!rectActivities) return
-
-    if (newVisibility) {
-      rectActivities.style.opacity = 1
-      showActivities()
-      updateActivities()
-
-    } else {
-      rectActivities.style.opacity = 0
-      hideActivities()
-    }
-
-    updateSettings({
-      key: SettingsKeys.displayActivities,
-      value: newVisibility,
-    })
-  })
+  rect.addEventListener('click', () => { onTapRectActivities(1) })
 }
 
 /**
@@ -70,5 +55,32 @@ export const initClockDigits = (clockDigits: ClockDigits) => {
 export const updateDigits = (arrDigits: Element[], values: number[]) => {
   arrDigits.map((digit, index) => {
     digit.text = formatDigits(values[index])
+  })
+}
+
+function onTapRectActivities(groupNumber: number) {
+  const rectActivities = document.getElementById(`activity-${groupNumber}`)
+
+  const key = groupNumber === 1 ? SettingsKeys.displayActivities : SettingsKeys.displayActivities2
+
+  const visibility = getSettingsValue(key)
+
+  const newVisibility = !visibility
+
+  if (!rectActivities) return
+
+  if (newVisibility) {
+    rectActivities.style.opacity = 1
+    showActivities(groupNumber)
+    updateActivities()
+
+  } else {
+    rectActivities.style.opacity = 0
+    hideActivities(groupNumber)
+  }
+
+  updateSettings({
+    key,
+    value: newVisibility,
   })
 }

@@ -21,6 +21,7 @@ export enum DateFormat {
 export enum SettingsKeys {
   dateFormat = 'dateFormat',
   displayActivities = 'displayActivities',
+  displayActivities2 = 'displayActivities2',
   displayBatteryDate = 'displayBatteryDate',
 }
 
@@ -29,6 +30,7 @@ let onsettingschange: Function
 let settings: Settings = {
   dateFormat: DateFormat.dayDateMonth,
   displayActivities: false,
+  displayActivities2: false,
   displayBatteryDate: false,
 }
 
