@@ -26,7 +26,7 @@ export const addTapEventOnHours = () => {
 
 /** Start minutes animation. */
 export const startHoursAnimation = (minutes: number, seconds: number) => {
-  if (minutes !== 0 || seconds !== 0) { return }
+  if (minutes !== 59 || seconds !== 59) { return }
 
   [0, 1, 2, 3]
     .map((n) => {
@@ -51,13 +51,13 @@ export const startHoursAnimation = (minutes: number, seconds: number) => {
 }
 
 export const updateHoursDigits = (arrayDigits: Element[], value: number = 0) => {
-  const currPlusOneValue = formatHours(value + 1)
+  const currPlusTwoValue = formatHours(value + 2)
 
   // Subsequent runs
   if (arrayDigits.length > 1 && arrayDigits[0].text.length > 1) {
     arrayDigits.some((digits) => {
       if (digits.y === 390) {
-        digits.text = formatDigits(currPlusOneValue)
+        digits.text = formatDigits(currPlusTwoValue)
         return true
       }
 
@@ -70,7 +70,7 @@ export const updateHoursDigits = (arrayDigits: Element[], value: number = 0) => 
   const prevValue = formatHours(value - 1)
   const nextValue = formatHours(value + 1)
 
-  updateDigits(arrayDigits, [prevValue, value, nextValue, currPlusOneValue])
+  updateDigits(arrayDigits, [prevValue, value, nextValue, currPlusTwoValue])
 }
 
 /** Returns next animation type according to the current Y coordinate. */
