@@ -39,6 +39,10 @@
   font-family: "System-Light";
 }
 
+#date__number-day {
+  text-length: 32;
+}
+
 #date__number-month {
   text-length: 32;
 }

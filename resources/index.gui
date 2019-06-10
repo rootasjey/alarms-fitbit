@@ -8,11 +8,12 @@
     </g>
 
     <g id="date">
-      <text id="date__number" class="date" x="10" y="200" opacity=".5" />
-      <text id="date__day" class="date" x="10" y="220" opacity=".5" />
-      <text id="date__month" class="date" x="10" y="240" opacity=".5" />
+      <text id="date__number" class="date" x="5" y="200" opacity=".5" />
+      <text id="date__day" class="date" x="5" y="220" opacity=".5" />
+      <text id="date__month" class="date" x="5" y="240" opacity=".5" />
 
-      <text id="date__number-month" class="date" x="10" y="240" visibility="hidden" opacity=".5" />
+      <text id="date__number-day" class="date" x="5" y="220" visibility="hidden" opacity=".5" />
+      <text id="date__number-month" class="date" x="5" y="240" visibility="hidden" opacity=".5" />
     </g>
 
     <g id="clock">

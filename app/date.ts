@@ -1,5 +1,6 @@
 import document from 'document';
 import { fadeIn, fadeOut } from './animationFactory';
+
 import {
   getSettingsValue,
   SettingsKeys,
@@ -7,12 +8,15 @@ import {
   DateFormat
 } from './settings';
 
+import { formatDigits } from '../common/format';
+
 const ELEMENTS: DateElements = {
   container: null,
   children : {
     day: null,
     number: null,
     month: null,
+    numberDay: null,
     numberMonth: null,
   },
 }
@@ -22,15 +26,8 @@ export const addTapEventOnDate = () => {
   if(!rect) { return }
 
   rect.onclick = () => {
-    const { day, month, number, numberMonth } = ELEMENTS.children
-    if (!day || !month || !number || !numberMonth) return
-
     if (getSettingsValue(SettingsKeys.dateFormat) === DateFormat.dateMonth) {
-      numberMonth.style.visibility = 'hidden'
-
-      day.style.visibility = 'visible'
-      number.style.visibility = 'visible'
-      month.style.visibility = 'visible'
+      showDayDateMonthOnly()
 
       updateSettings({
         key: SettingsKeys.dateFormat,
@@ -40,17 +37,22 @@ export const addTapEventOnDate = () => {
       return
     }
 
-    numberMonth.style.visibility = 'visible'
-
-    day.style.visibility = 'hidden'
-    number.style.visibility = 'hidden'
-    month.style.visibility = 'hidden'
+    showDateMonthOnly()
 
     updateSettings({
       key: SettingsKeys.dateFormat,
       value: DateFormat.dateMonth,
     })
   }
+}
+
+export const initDateElements = () => {
+  ELEMENTS.container = document.getElementById('date')
+  ELEMENTS.children.day = document.getElementById('date__day')
+  ELEMENTS.children.number = document.getElementById('date__number')
+  ELEMENTS.children.month = document.getElementById('date__month')
+  ELEMENTS.children.numberDay = document.getElementById('date__number-day')
+  ELEMENTS.children.numberMonth = document.getElementById('date__number-month')
 }
 
 export const showDateIfSettings = () => {
@@ -65,6 +67,10 @@ export const showDateIfSettings = () => {
       return result || (elem.style.opacity !== 0 && elem.style.visibility !== 'hidden')
     }, false)
 
+  if (getSettingsValue(SettingsKeys.dateFormat) === DateFormat.dateMonth) {
+    showDateMonthOnly()
+  }
+
   if (dateShouldBeVisible !== dateIsVisible) {
     const { children } = ELEMENTS
     const animationFun = dateShouldBeVisible ? fadeIn : fadeOut
@@ -73,14 +79,6 @@ export const showDateIfSettings = () => {
       animationFun(children[key])
     }
   }
-}
-
-export const initDateElements = () => {
-  ELEMENTS.container = document.getElementById('date')
-  ELEMENTS.children.day = document.getElementById('date__day')
-  ELEMENTS.children.number = document.getElementById('date__number')
-  ELEMENTS.children.month = document.getElementById('date__month')
-  ELEMENTS.children.numberMonth = document.getElementById('date__number-month')
 }
 
 export const toggleDate = () => {
@@ -118,7 +116,13 @@ export const updateDate = () => {
   if (ELEMENTS.children.day) { ELEMENTS.children.day.text = day }
   if (ELEMENTS.children.month) { ELEMENTS.children.month.text = month }
   if (ELEMENTS.children.number) { ELEMENTS.children.number.text = `${number}` }
-  if (ELEMENTS.children.numberMonth) { ELEMENTS.children.numberMonth.text = `${number}/${today.getMonth() + 1}` }
+  if (ELEMENTS.children.numberDay) { ELEMENTS.children.numberDay.text = formatDigits(number) }
+  if (ELEMENTS.children.numberMonth) { ELEMENTS.children.numberMonth.text = formatDigits(today.getMonth() + 1) }
+}
+
+export const updateDateLazily = (seconds: number) => {
+  if (seconds % 5 !== 0) { return }
+  updateDate()
 }
 
 function numberToDay(n: number) {
@@ -133,11 +137,6 @@ function numberToDay(n: number) {
   }
 
   return days[n]
-}
-
-export const updateDateLazily = (seconds: number) => {
-  if (seconds % 5 !== 0) { return }
-  updateDate()
 }
 
 function numberToMonth(n: number) {
@@ -157,4 +156,28 @@ function numberToMonth(n: number) {
   }
 
   return months[n]
+}
+
+function showDateMonthOnly() {
+  const { day, month, number, numberDay, numberMonth } = ELEMENTS.children
+  if (!day || !month || !number || !numberDay || !numberMonth) return
+
+  numberDay.style.visibility = 'visible'
+  numberMonth.style.visibility = 'visible'
+
+  day.style.visibility = 'hidden'
+  number.style.visibility = 'hidden'
+  month.style.visibility = 'hidden'
+}
+
+function showDayDateMonthOnly() {
+  const { day, month, number, numberDay, numberMonth } = ELEMENTS.children
+  if (!day || !month || !number || !numberDay || !numberMonth) return
+
+  numberDay.style.visibility = 'hidden'
+  numberMonth.style.visibility = 'hidden'
+
+  day.style.visibility = 'visible'
+  number.style.visibility = 'visible'
+  month.style.visibility = 'visible'
 }
