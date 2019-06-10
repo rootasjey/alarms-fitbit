@@ -29,6 +29,28 @@ export const initBatteryElements = () => {
   ELEMENTS.circles.circle3 = document.getElementById('battery__circle-3')
 }
 
+export const showBatteryIfSettings = () => {
+  const batteryShouldBeVisible = getSettingsValue(SettingsKeys.displayBatteryDate)
+
+  const batteryIsVisible = Object
+    .keys(ELEMENTS.circles)
+    .some((key) => {
+      const elem = ELEMENTS.circles[key]
+      if (!elem) return true
+
+      return elem.style.opacity !== 0 && elem.style.visibility !== 'hidden'
+    })
+
+  if (batteryShouldBeVisible !== batteryIsVisible) {
+    const { circles } = ELEMENTS
+    const animationFun = batteryShouldBeVisible ? fadeIn : fadeOut
+
+    for (const key of Object.keys(circles)) {
+      animationFun(circles[key])
+    }
+  }
+}
+
 export const toggleBattery = () => {
   const { container } = ELEMENTS
   if (!container) return 'hidden'

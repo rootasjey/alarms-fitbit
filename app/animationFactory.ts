@@ -1,6 +1,38 @@
 import { FinalType } from '../common/enumerations'
 import { getForegroundColor, getBackgroundColor } from './colors';
 
+
+export const animateIntValue = (config: AnimateIntValueConfig) => {
+  const { start, end, element } = config
+
+  console.log(`element.text: ${element.text}`)
+  element.text = typeof start === 'number' ? `${start}` : element.text
+
+  console.log(`element.text: ${element.text}`)
+  let currentValue = parseInt(element.text)
+  console.log(`currentValue: ${currentValue}`)
+
+  if (isNaN(currentValue)) {
+    currentValue = end
+    element.text = `${currentValue}`
+  }
+
+  const baseTime = 1000
+  const interval = Math.max(50, baseTime / Math.abs(currentValue - end))
+
+  console.log(`starting value: ${currentValue}`)
+  console.log(`interval: ${interval}`)
+
+  while (currentValue < end) {
+    currentValue++
+    console.log(`currentValue: ${currentValue}`)
+
+    setInterval(() => {
+      element.text = `${currentValue}`
+    }, interval)
+  }
+}
+
 export function createDigitsAnimation(config: CreateDigitsAnimationConfig) {
   const {
     startY,
@@ -118,4 +150,49 @@ function getNextOpacity(config: GetNextOpacityConfig) {
   }
 
   return parseFloat(nextOpacity.toFixed(2))
+}
+
+
+function grow(imageElement: ImageElement, add: number) {
+  const startW = imageElement.width
+  const startH = imageElement.height
+
+  const endW = startW + add
+  const endH = startH + add
+
+  const animation = (timestamp: number) => {
+    if (imageElement.width >= endW &&
+      imageElement.height >= endH) {
+      return
+    }
+
+    imageElement.width += 1
+    imageElement.height += 1
+
+    requestAnimationFrame(animation)
+  }
+
+  requestAnimationFrame(animation)
+}
+
+function shrink(imageElement: ImageElement, sub: number) {
+  const startW = imageElement.width
+  const startH = imageElement.height
+
+  const endW = startW - sub
+  const endH = startH - sub
+
+  const animation = (timestamp: number) => {
+    if (imageElement.width <= endW &&
+      imageElement.height <= endH) {
+      return
+    }
+
+    imageElement.width -= 1
+    imageElement.height -= 1
+
+    requestAnimationFrame(animation)
+  }
+
+  requestAnimationFrame(animation)
 }

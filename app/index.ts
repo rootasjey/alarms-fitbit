@@ -1,22 +1,32 @@
 import clock, { TickEvent } from 'clock'
+import { display } from 'display'
+import { HeartRateSensor } from 'heart-rate'
 
 import { formatHours } from '../common/format'
-import { initClockDigits, addTapEventOnTopDigits } from './digits'
+
+import { showActivitiesIfSettings, updateActivities } from './activities'
+
+import {
+  initBatteryElements,
+  updateBatteryLazily,
+  showBatteryIfSettings
+} from './battery'
+
+import { initDigitsColors } from './colors'
 
 import {
   initDateElements,
   updateDateLazily,
   updateDate,
-  addTapEventOnDate
-} from './date';
+  addTapEventOnDate,
+  showDateIfSettings
+} from './date'
 
-import { initBatteryElements, updateBatteryLazily } from './battery';
-import { initDigitsColors } from './colors';
+import { initClockDigits, addTapEventOnTopDigits } from './digits'
 import { addTapEventOnHours, startHoursAnimation, updateHoursDigits } from './hours'
 import { startMinutesAnimation, updateMinutesDigits } from './minutes'
 import { startSecondsAnimation, updateSecondsDigits, checkSecondsPosition } from './seconds'
-import { initSettings, getSettingsValue, SettingsKeys } from './settings';
-import { display } from 'display';
+import { initSettings, getSettingsValue, SettingsKeys } from './settings'
 
 clock.granularity = 'seconds'
 
@@ -26,6 +36,9 @@ const clockDigits: ClockDigits = {
   seconds: [],
   separator: undefined,
 }
+
+const hr = new HeartRateSensor()
+hr.start()
 
 initClockDigits(clockDigits)
 initDigitsColors(clockDigits)
@@ -37,9 +50,14 @@ initSettings((settings: Settings) => {
 })
 
 updateDate()
+
 addTapEventOnDate()
 addTapEventOnHours()
 addTapEventOnTopDigits()
+
+showActivitiesIfSettings()
+showBatteryIfSettings()
+showDateIfSettings()
 
 clock.ontick = (event: TickEvent) => {
   const hours = formatHours(event.date.getHours())
@@ -51,9 +69,9 @@ clock.ontick = (event: TickEvent) => {
     updateBatteryLazily(seconds)
   }
 
-  if (seconds % 10 === 0) {
-    checkSecondsPosition()
-  }
+  // if (seconds % 10 === 0) {
+  //   checkSecondsPosition()
+  // }
 
   updateHoursDigits(clockDigits.hours, hours)
   updateMinutesDigits(clockDigits.minutes, minutes)
@@ -62,11 +80,18 @@ clock.ontick = (event: TickEvent) => {
   startSecondsAnimation()
   startMinutesAnimation(seconds)
   startHoursAnimation(minutes, seconds)
+
+  if (getSettingsValue(SettingsKeys.displayActivities)) {
+    updateActivities(hr)
+  }
 }
 
 display.addEventListener('change', () => {
   if (display.on) {
-    checkSecondsPosition()
+    // checkSecondsPosition()
+    hr.start()
     return
   }
+
+  hr.stop()
 })

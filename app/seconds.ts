@@ -22,6 +22,8 @@ export const checkSecondsPosition = () => {
     if (hashInt[key] > 1) { overStepped = true }
   }
 
+  // console.log(overStepped)
+
   if (overStepped) {
     resetSecondsPosition()
     // console.log('re-ajusted seconds')

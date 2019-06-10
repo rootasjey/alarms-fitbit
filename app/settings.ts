@@ -13,18 +13,28 @@ const SETTINGS_FILE = 'settings.cbor'
 // const KEY_TEMPERATURE_UNIT = 'imperialUnit'
 // const KEY_MANUAL_LOCATION = 'manualLocation'
 
-let onsettingschange: Function
-
-let settings: Settings = {
-  displayBatteryDate: false
+export enum DateFormat {
+  dateMonth = 'dateMonth',
+  dayDateMonth = 'dayDateMonth',
 }
 
 export enum SettingsKeys {
+  dateFormat = 'dateFormat',
+  displayActivities = 'displayActivities',
   displayBatteryDate = 'displayBatteryDate',
+}
+
+let onsettingschange: Function
+
+let settings: Settings = {
+  dateFormat: DateFormat.dayDateMonth,
+  displayActivities: false,
+  displayBatteryDate: false,
 }
 
 export function initSettings(callback: Function) {
   settings = loadSettings()
+  // console.log(JSON.stringify(settings))
   onsettingschange = callback
   onsettingschange(settings)
 }

@@ -33,17 +33,29 @@
       </g>
 
       <g id="seconds-digits">
-        <text id="seconds-digits-0" class="seconds" x="290" y="120" opacity=".5" />
-        <text id="seconds-digits-1" class="seconds" x="290" y="150" opacity="1" />
-        <text id="seconds-digits-2" class="seconds" x="290" y="180" opacity=".5" />
-        <text id="seconds-digits-3" class="seconds" x="290" y="210" opacity="0" />
+        <text id="seconds-digits-0" class="seconds" x="300" y="120" opacity=".5" />
+        <text id="seconds-digits-1" class="seconds" x="300" y="150" opacity="1" />
+        <text id="seconds-digits-2" class="seconds" x="300" y="180" opacity=".5" />
+        <text id="seconds-digits-3" class="seconds" x="300" y="210" opacity="0" />
       </g>
     </g>
+
+    <rect id="activity" x="60" y="0" height="70" width="230" fill="black" opacity="0" visibility="false">
+      <g>
+        <image id="activity__steps-icon" href="icons/activities/steps.png" x="60" y="10" width="20" height="20" opacity="0" />
+        <text id="activity__steps-text" class="activity" x="90" y="25" />
+      </g>
+
+      <g>
+        <image id="activity__hr-icon" href="icons/activities/hr.png" x="60" y="35" width="20" height="20" opacity="0" />
+        <text id="activity__hr-text" class="activity" x="90" y="50" />
+      </g>
+    </rect>
 
     <g id="actions-container">
       <rect id="actions-hours" x="60" y="80" height="80" width="100" fill="red" opacity="0" pointer-events="visible" />
       <rect id="actions-date" x="0" y="170" height="80" width="60" fill="red" opacity="0" pointer-events="visible" />
-      <rect id="actions-top-clock" x="60" y="0" height="70" width="230" fill="red" opacity="0" pointer-events="visible" />
+      <rect id="actions-top-clock" x="60" y="0" height="70" width="240" fill="red" opacity="0" pointer-events="visible" />
     </g>
   </rect>
 </svg>

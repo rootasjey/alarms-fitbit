@@ -1,13 +1,35 @@
 import document from 'document'
 
 import { formatDigits } from '../common/format'
+import { getSettingsValue, SettingsKeys, updateSettings } from './settings';
+import { hideActivities, showActivities, updateActivities } from './activities';
 
 export const addTapEventOnTopDigits = () => {
   const rect = document.getElementById('actions-top-clock')
   if (!rect) return
 
   rect.addEventListener('click', () => {
-    // TODO
+    const rectActivities = document.getElementById('activity')
+    const visibility = getSettingsValue(SettingsKeys.displayActivities)
+
+    const newVisibility = !visibility
+
+    if (!rectActivities) return
+
+    if (newVisibility) {
+      rectActivities.style.opacity = 1
+      showActivities()
+      updateActivities()
+
+    } else {
+      rectActivities.style.opacity = 0
+      hideActivities()
+    }
+
+    updateSettings({
+      key: SettingsKeys.displayActivities,
+      value: newVisibility,
+    })
   })
 }
 

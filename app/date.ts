@@ -1,6 +1,11 @@
 import document from 'document';
 import { fadeIn, fadeOut } from './animationFactory';
-import { getSettingsValue, SettingsKeys } from './settings';
+import {
+  getSettingsValue,
+  SettingsKeys,
+  updateSettings,
+  DateFormat
+} from './settings';
 
 const ELEMENTS: DateElements = {
   container: null,
@@ -20,14 +25,17 @@ export const addTapEventOnDate = () => {
     const { day, month, number, numberMonth } = ELEMENTS.children
     if (!day || !month || !number || !numberMonth) return
 
-    if (numberMonth.style.visibility === 'visible') {
+    if (getSettingsValue(SettingsKeys.dateFormat) === DateFormat.dateMonth) {
       numberMonth.style.visibility = 'hidden'
 
       day.style.visibility = 'visible'
       number.style.visibility = 'visible'
       month.style.visibility = 'visible'
 
-      // TODO: save
+      updateSettings({
+        key: SettingsKeys.dateFormat,
+        value: DateFormat.dayDateMonth,
+      })
 
       return
     }
@@ -37,7 +45,33 @@ export const addTapEventOnDate = () => {
     day.style.visibility = 'hidden'
     number.style.visibility = 'hidden'
     month.style.visibility = 'hidden'
-    // TODO: save
+
+    updateSettings({
+      key: SettingsKeys.dateFormat,
+      value: DateFormat.dateMonth,
+    })
+  }
+}
+
+export const showDateIfSettings = () => {
+  const dateShouldBeVisible = getSettingsValue(SettingsKeys.displayBatteryDate)
+
+  const dateIsVisible = Object
+    .keys(ELEMENTS.children)
+    .reduce((result: boolean, key: string) => {
+      const elem = ELEMENTS.children[key]
+      if (!elem) return true
+
+      return result || (elem.style.opacity !== 0 && elem.style.visibility !== 'hidden')
+    }, false)
+
+  if (dateShouldBeVisible !== dateIsVisible) {
+    const { children } = ELEMENTS
+    const animationFun = dateShouldBeVisible ? fadeIn : fadeOut
+
+    for (const key of Object.keys(children)) {
+      animationFun(children[key])
+    }
   }
 }
 
