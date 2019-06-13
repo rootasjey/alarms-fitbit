@@ -19,36 +19,50 @@ const ACTIVITIES_LIST2 = [
   'distance',
 ]
 
-export const hide = (listNumber: number) => {
+export const hide = (listNumber: number): Promise<{ action: 'hidden' | 'visible', success: boolean }> => {
   const list = listNumber === 1 ? ACTIVITIES_LIST : ACTIVITIES_LIST2
+
+  const arrayAnimations = []
 
   list.map((activity) => {
     const textElem = document.getElementById(`activity__${activity}-text`)
     const iconElem = document.getElementById(`activity__${activity}-icon`)
     if (!textElem || !iconElem) return
 
-    textElem.style.opacity = 0
-    iconElem.style.opacity = 0
+    const animText = animations.fadeOut({ element: textElem})
+    const animIcon = animations.fadeOut({ element: iconElem })
+
+    arrayAnimations.push(animText, animIcon)
   })
 
-  setTimeout(() => {
-    const rectActivities = document.getElementById(`activity-${listNumber}`)
+  const rectActivities = document.getElementById(`activity-${listNumber}`)
 
-    if (!rectActivities) return
+  if (rectActivities) {
+    const animRect = animations.fadeOut({ element: rectActivities })
+    arrayAnimations.push(animRect)
+  }
 
-    rectActivities.style.opacity = 0
-    rectActivities.style.visibility = 'hidden'
-  }, 500);
+  return Promise.all(arrayAnimations)
+    .then((result) => {
+      return { action: 'hidden', success: true}
+    })
 }
 
-export const show = (listNumber: number) => {
+export const show = (listNumber: number): Promise<{ success: boolean, action: 'hidden' | 'visible' | 'none' }> => {
   const list = listNumber === 1 ? ACTIVITIES_LIST : ACTIVITIES_LIST2
   const rectActivities = document.getElementById(`activity-${listNumber}`)
 
-  if (!rectActivities) return
+  if (!rectActivities) {
+    return Promise.resolve({ action: 'none', success: false })
+  }
 
-  rectActivities.style.opacity = 1
   rectActivities.style.visibility = 'visible'
+  rectActivities.style.opacity = 0
+
+  const arrayAnimations = []
+
+  const animRect = animations.fadeIn({ element: rectActivities })
+  arrayAnimations.push(animRect)
 
   list.map((activity) => {
     const textElem = document.getElementById(`activity__${activity}-text`)
@@ -56,9 +70,16 @@ export const show = (listNumber: number) => {
 
     if (!textElem || !iconElem) return
 
-    textElem.style.opacity = 1
-    iconElem.style.opacity = 1
+    const animText = animations.fadeIn({ element: textElem })
+    const animIcon = animations.fadeIn({ element: iconElem })
+
+    arrayAnimations.push(animText, animIcon)
   })
+
+  return Promise.all(arrayAnimations)
+    .then((result) => {
+      return { action: 'visible', success: true }
+    })
 }
 
 /** Show if settings allows it. */
@@ -150,5 +171,7 @@ function updateHR(hr?: HeartRateSensor) {
   iconElem.style.fill = colors.getBackgroundColor()
 
   iconElem.style.opacity = 1
-  animations.fadeOut(iconElem)
+  iconElem.style.visibility = 'visible'
+
+  animations.fadeOut({ element: iconElem, step: .05 })
 }

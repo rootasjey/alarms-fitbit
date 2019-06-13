@@ -23,7 +23,9 @@ export enum Keys {
   displayActivities   = 'displayActivities',
   displayActivities2  = 'displayActivities2',
   displayBatteryDate  = 'displayBatteryDate',
+  isBottomDigitTapOn  = 'isBottomDigitTapOn',
   isHoursTapOn        = 'isHoursTapOn',
+  isTopDigitTapOn     = 'isTopDigitTapOn',
 }
 
 let onsettingschange: Function
@@ -33,22 +35,41 @@ let settings: Settings = {
   displayActivities   : false,
   displayActivities2  : false,
   displayBatteryDate  : false,
+  isBottomDigitTapOn  : true,
   isHoursTapOn        : true,
+  isTopDigitTapOn     : true,
 }
 
-export function init(callback: Function) {
+export const init = (callback: Function) => {
   settings = load()
   // console.log(JSON.stringify(settings))
   onsettingschange = callback
   onsettingschange(settings)
 }
 
-export function getValue(key = '') {
+export const getValue = (key = '') => {
   if (key.length > 0) return settings[key]
   return undefined
 }
 
-export function setValue(config: SettingsUpdateConfig) {
+export const resetUILocks = () => {
+  setValue({
+    key: Keys.isBottomDigitTapOn,
+    value: true,
+  })
+
+  setValue({
+    key: Keys.isTopDigitTapOn,
+    value: true,
+  })
+
+  setValue({
+    key: Keys.isHoursTapOn,
+    value: true,
+  })
+}
+
+export const setValue = (config: SettingsUpdateConfig) => {
   const { key, value } = config
   settings[key] = value
 }

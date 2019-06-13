@@ -2,6 +2,7 @@ import document         from 'document'
 
 import * as format      from '../common/format'
 import * as activities  from './activities'
+import * as animations  from './animations'
 import * as settings    from './settings'
 import { Keys }         from './settings'
 
@@ -9,14 +10,48 @@ export const addTapEventOnBottom = () => {
   const rect = document.getElementById('actions-bottom-clock')
   if (!rect) return
 
-  rect.addEventListener('click', () => { onTapRectActivities(2) })
+  rect.addEventListener('click', () => {
+    if (settings.getValue(Keys.isBottomDigitTapOn) === false) {
+      return
+    }
+
+    settings.setValue({
+      key: Keys.isBottomDigitTapOn,
+      value: false,
+    })
+
+    onTapRectActivities(2)
+    .then((result) => {
+        settings.setValue({
+          key: Keys.isBottomDigitTapOn,
+          value: true,
+        })
+      })
+  })
 }
 
 export const addTapEventOnTop = () => {
   const rect = document.getElementById('actions-top-clock')
   if (!rect) return
 
-  rect.addEventListener('click', () => { onTapRectActivities(1) })
+  rect.addEventListener('click', () => {
+    if (settings.getValue(Keys.isTopDigitTapOn) === false) {
+      return
+    }
+
+    settings.setValue({
+      key: Keys.isTopDigitTapOn,
+      value: false,
+    })
+
+    onTapRectActivities(1)
+    .then((result) => {
+        settings.setValue({
+          key: Keys.isTopDigitTapOn,
+          value: true,
+        })
+      })
+  })
 }
 
 /**
@@ -59,7 +94,7 @@ export const update = (arrDigits: Element[], values: number[]) => {
   })
 }
 
-function onTapRectActivities(groupNumber: number) {
+function onTapRectActivities(groupNumber: number): Promise<{ action: string, success: boolean }> {
   const rectActivities = document.getElementById(`activity-${groupNumber}`)
 
   const key = groupNumber === 1 ? Keys.displayActivities : Keys.displayActivities2
@@ -68,20 +103,30 @@ function onTapRectActivities(groupNumber: number) {
 
   const newVisibility = !visibility
 
-  if (!rectActivities) return
+  if (!rectActivities) return Promise.resolve({ action: 'none', success: false })
 
   if (newVisibility) {
-    rectActivities.style.opacity = 1
-    activities.show(groupNumber)
-    activities.sync()
+    return activities.show(groupNumber)
+      .then((result) => {
+        activities.sync()
+
+        settings.setValue({
+          key,
+          value: newVisibility,
+        })
+
+        return { action: 'visible', success: true }
+      })
 
   } else {
-    rectActivities.style.opacity = 0
-    activities.hide(groupNumber)
-  }
+    return activities.hide(groupNumber)
+      .then((result) => {
+        settings.setValue({
+          key,
+          value: newVisibility,
+        })
 
-  settings.setValue({
-    key,
-    value: newVisibility,
-  })
+        return { action: 'hidden', success: true }
+      })
+  }
 }

@@ -72,7 +72,7 @@ export const showConditional = () => {
     const animationFun = dateShouldBeVisible ? animations.fadeIn : animations.fadeOut
 
     for (const key of Object.keys(children)) {
-      animationFun(children[key])
+      animationFun({ element: children[key] })
     }
   }
 }
@@ -80,32 +80,31 @@ export const showConditional = () => {
 /** Toggle visibility */
 export const toggle = () => {
   const { container } = ELEMENTS
+
   if (!container) {
     return Promise.resolve({ success: false, action: 'none' })
   }
 
   const visibility = settings.getValue(Keys.displayBatteryDate)
 
-  const animationsPromises = []
+  const animationsPromises: Array<Promise<ResultAnimationConfig>> = []
   let action = ''
 
-  if (visibility) {
-    const { children } = ELEMENTS
+  const children = getDateChildren()
 
-    for (const key of Object.keys(children)) {
-      const animation = animations.fadeOut(children[key])
+  if (visibility) {
+    children.map((value) => {
+      const animation = animations.fadeOut({ element: ELEMENTS.children[value] })
       animationsPromises.push(animation)
-    }
+    })
 
     action = 'hidden'
 
   } else {
-    const { children } = ELEMENTS
-
-    for (const key of Object.keys(children)) {
-      const animation = animations.fadeIn(children[key])
+    children.map((value) => {
+      const animation = animations.fadeIn({ element: ELEMENTS.children[value], endValue: .5 })
       animationsPromises.push(animation)
-    }
+    })
 
     action = 'visible'
   }
@@ -133,6 +132,18 @@ export const updateLazily = (seconds: number) => {
   if (seconds % 5 !== 0) { return }
   sync()
 }
+
+/** Return date children according to current date format settings */
+function getDateChildren() {
+  if (settings.getValue(Keys.dateFormat) === settings.DateFormat.dayDateMonth) {
+    return Object.keys(ELEMENTS.children)
+      .filter((value) => value === 'day' || value === 'number' || value === 'month')
+  }
+
+  return Object.keys(ELEMENTS.children)
+    .filter((value) => value === 'numberDay' || value === 'numberMonth')
+}
+
 
 function numberToDay(n: number) {
   const days: Days = {

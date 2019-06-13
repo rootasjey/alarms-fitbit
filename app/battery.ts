@@ -49,7 +49,7 @@ export const showConditional = () => {
     const animationFun = batteryShouldBeVisible ? animations.fadeIn : animations.fadeOut
 
     for (const key of Object.keys(circles)) {
-      animationFun(circles[key])
+      animationFun({ element: circles[key] })
     }
   }
 }
@@ -70,7 +70,7 @@ export const toggle = () => {
     const { circles } = ELEMENTS
 
     for (const key of Object.keys(circles)) {
-      const animation = animations.fadeOut(circles[key])
+      const animation = animations.fadeOut({ element: circles[key] })
       animationsPromises.push(animation)
     }
 
@@ -80,7 +80,7 @@ export const toggle = () => {
     const { circles } = ELEMENTS
 
     for (const key of Object.keys(circles)) {
-      animations.fadeIn(circles[key])
+      animations.fadeIn({ element: circles[key] })
     }
 
     action = 'visible'

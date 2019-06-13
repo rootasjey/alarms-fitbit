@@ -86,21 +86,30 @@ export const createDigitsAnimation = (config: CreateDigitsAnimationConfig) => {
   }
 }
 
-export const fadeIn = (elem: Element | null): Promise<{ success: boolean }> => {
-  if (!elem) {
+export const fadeIn = (config: FadeAnimationConfig): Promise<{ success: boolean }> => {
+  const { element, step, endValue } = config
+
+  if (!element) {
     return Promise.resolve({ success: true })
   }
 
-  const opacityStep = .20
+  const opacityEnd = typeof endValue === 'number' ? endValue : 1
+  const opacityStep = typeof step === 'number' ? step : .2
+
+  element.style.visibility = 'visible'
 
   return new Promise((resolve, reject) => {
     const animation = (timestamp: number) => {
-      if (elem.style.opacity >= 1) {
+      if (element.style.opacity >= opacityEnd) {
         return resolve({ success: true })
       }
 
-      const newOpacity = (elem.style.opacity + opacityStep).toFixed(2)
-      elem.style.opacity = parseFloat(newOpacity)
+      if (typeof element.style.opacity === 'undefined') return
+
+      const opacityClamped = parseFloat(element.style.opacity.toFixed(2))
+
+      const newOpacity = (opacityClamped + opacityStep).toFixed(2)
+      element.style.opacity = parseFloat(newOpacity)
 
       requestAnimationFrame(animation)
     }
@@ -110,21 +119,28 @@ export const fadeIn = (elem: Element | null): Promise<{ success: boolean }> => {
 
 }
 
-export const fadeOut = (elem: Element | null): Promise<{ success: boolean }> => {
-  if (!elem) {
+export const fadeOut = (config: FadeAnimationConfig): Promise<{ success: boolean }> => {
+  const { element, step } = config
+
+  if (!element) {
     return Promise.resolve({ success: true })
   }
 
-  const opacityStep = .20
+  const opacityStep = typeof step === 'number' ? step : .20
 
   return new Promise((resolve, reject) => {
     const animation = (timestamp: number) => {
-      if (elem.style.opacity <= 0) {
+      if (element.style.opacity <= 0) {
+        element.style.visibility = 'hidden'
         return resolve({ success: true })
       }
 
-      const newOpacity = (elem.style.opacity - opacityStep).toFixed(2)
-      elem.style.opacity = parseFloat(newOpacity)
+      if (typeof element.style.opacity === 'undefined') return
+
+      const opacityClamped = parseFloat(element.style.opacity.toFixed(2))
+
+      const newOpacity = (opacityClamped - opacityStep).toFixed(2)
+      element.style.opacity = parseFloat(newOpacity)
 
       requestAnimationFrame(animation)
     }

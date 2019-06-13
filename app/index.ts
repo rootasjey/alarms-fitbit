@@ -37,6 +37,8 @@ settings.init((settings: Settings) => {
   // console.log('settings chnged')
 })
 
+settings.resetUILocks()
+
 date.sync()
 
 date.addTapEvent()
