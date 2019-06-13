@@ -3,8 +3,8 @@
   Requires companion/simple/companion-settings.js
   Callback should be used to update your UI.
 */
-import { me } from 'appbit'
-import * as fs from 'fs'
+import { me }         from 'appbit'
+import * as fs        from 'fs'
 import * as messaging from 'messaging'
 
 const SETTINGS_TYPE = 'cbor'
@@ -18,7 +18,7 @@ export enum DateFormat {
   dayDateMonth = 'dayDateMonth',
 }
 
-export enum SettingsKeys {
+export enum Keys {
   dateFormat = 'dateFormat',
   displayActivities = 'displayActivities',
   displayActivities2 = 'displayActivities2',
@@ -34,19 +34,19 @@ let settings: Settings = {
   displayBatteryDate: false,
 }
 
-export function initSettings(callback: Function) {
-  settings = loadSettings()
+export function init(callback: Function) {
+  settings = load()
   // console.log(JSON.stringify(settings))
   onsettingschange = callback
   onsettingschange(settings)
 }
 
-export function getSettingsValue(key = '') {
+export function getValue(key = '') {
   if (key.length > 0) return settings[key]
   return undefined
 }
 
-export function updateSettings(config: SettingsUpdateConfig) {
+export function update(config: SettingsUpdateConfig) {
   const { key, value } = config
   settings[key] = value
 }
@@ -67,10 +67,10 @@ messaging.peerSocket.addEventListener('message', function (evt) {
 })
 
 // Register for the unload event
-me.addEventListener('unload', saveSettings)
+me.addEventListener('unload', save)
 
 // Load settings from filesystem
-function loadSettings() {
+function load() {
   try {
     return fs.readFileSync(SETTINGS_FILE, SETTINGS_TYPE)
   } catch (ex) {
@@ -79,6 +79,6 @@ function loadSettings() {
 }
 
 // Save settings to the filesystem
-function saveSettings() {
+function save() {
   fs.writeFileSync(SETTINGS_FILE, settings, SETTINGS_TYPE)
 }

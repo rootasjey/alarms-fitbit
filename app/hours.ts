@@ -1,23 +1,23 @@
-import document from 'document'
+import document         from 'document'
 
-import { FinalType } from '../common/enumerations'
-import { formatDigits, formatHours } from '../common/format'
-import { createDigitsAnimation } from './animationFactory'
-import { updateDigits } from './digits'
-import { toggleDate } from './date';
-import { toggleBattery } from './battery';
-import { updateSettings } from './settings';
+import { FinalType }    from '../common/enumerations'
+import * as format      from '../common/format'
+import * as animations  from './animations'
+import * as battery     from './battery'
+import * as date        from './date'
+import * as digtis      from './digits'
+import * as settings    from './settings'
 
 /** Toggle date and battery when tapping on hours. */
-export const addTapEventOnHours = () => {
+export const addTapEvent = () => {
   const rect = document.getElementById('actions-hours')
   if (!rect) return
 
   rect.addEventListener('click', () => {
-    const dateVisibility = toggleDate()
-    const batteryVisibility = toggleBattery()
+    const dateVisibility = date.toggle()
+    const batteryVisibility = battery.toggle()
 
-    updateSettings({
+    settings.update({
       key: 'displayBatteryDate',
       value: dateVisibility === 'visible' && batteryVisibility === 'visible'
     })
@@ -25,7 +25,7 @@ export const addTapEventOnHours = () => {
 }
 
 /** Start minutes animation. */
-export const startHoursAnimation = (minutes: number, seconds: number) => {
+export const startAnimation = (minutes: number, seconds: number) => {
   if (minutes !== 59 || seconds !== 59) { return }
 
   [0, 1, 2, 3]
@@ -37,7 +37,7 @@ export const startHoursAnimation = (minutes: number, seconds: number) => {
       const endY = getNextY(startY)
       const finalType = getNextAnimationType(startY)
 
-      const animation = createDigitsAnimation({
+      const animation = animations.createDigitsAnimation({
         startY,
         endY,
         element,
@@ -50,14 +50,28 @@ export const startHoursAnimation = (minutes: number, seconds: number) => {
     })
 }
 
-export const updateHoursDigits = (arrayDigits: Element[], value: number = 0) => {
-  const currPlusTwoValue = formatHours(value + 2)
+export const updateDigits = (arrayDigits: Element[], value: number = 0) => {
+  const prevValue = format.formatHours(value - 1)
+  const nextValue = format.formatHours(value + 1)
+  const currPlusTwoValue = format.formatHours(value + 2)
+
+  var sorted = arrayDigits
+    .map((element) => element)
+    .sort((a, b) => {
+      return a.y - b.y
+    })
+
+  digtis.update(sorted, [prevValue, value, nextValue, currPlusTwoValue])
+}
+
+export const updateDigitsLazily = (arrayDigits: Element[], value: number = 0) => {
+  const currPlusTwoValue = format.formatHours(value + 2)
 
   // Subsequent runs
   if (arrayDigits.length > 1 && arrayDigits[0].text.length > 1) {
     arrayDigits.some((digits) => {
       if (digits.y === 390) {
-        digits.text = formatDigits(currPlusTwoValue)
+        digits.text = format.formatDigits(currPlusTwoValue)
         return true
       }
 
@@ -67,10 +81,11 @@ export const updateHoursDigits = (arrayDigits: Element[], value: number = 0) => 
     return
   }
 
-  const prevValue = formatHours(value - 1)
-  const nextValue = formatHours(value + 1)
+  // First run
+  const prevValue = format.formatHours(value - 1)
+  const nextValue = format.formatHours(value + 1)
 
-  updateDigits(arrayDigits, [prevValue, value, nextValue, currPlusTwoValue])
+  digtis.update(arrayDigits, [prevValue, value, nextValue, currPlusTwoValue])
 }
 
 /** Returns next animation type according to the current Y coordinate. */

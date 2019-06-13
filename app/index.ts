@@ -1,32 +1,18 @@
 import clock, { TickEvent } from 'clock'
-import { display } from 'display'
-import { HeartRateSensor } from 'heart-rate'
+import { display }          from 'display'
+import { HeartRateSensor }  from 'heart-rate'
 
-import { formatHours } from '../common/format'
-
-import { showActivitiesIfSettings, updateActivities } from './activities'
-
-import {
-  initBatteryElements,
-  updateBatteryLazily,
-  showBatteryIfSettings
-} from './battery'
-
-import { initDigitsColors } from './colors'
-
-import {
-  initDateElements,
-  updateDateLazily,
-  updateDate,
-  addTapEventOnDate,
-  showDateIfSettings
-} from './date'
-
-import { initClockDigits, addTapEventOnTopDigits, addTapEventOnBottomDigits } from './digits'
-import { addTapEventOnHours, startHoursAnimation, updateHoursDigits } from './hours'
-import { startMinutesAnimation, updateMinutesDigits } from './minutes'
-import { startSecondsAnimation, updateSecondsDigits, checkSecondsPosition } from './seconds'
-import { initSettings, getSettingsValue, SettingsKeys } from './settings'
+import { formatHours }      from '../common/format'
+import * as activities      from './activities'
+import * as battery         from './battery'
+import * as colors          from './colors'
+import * as date            from './date'
+import * as digits          from './digits'
+import * as hoursUtils      from './hours'
+import * as minutesUtils    from './minutes'
+import * as secondsUtils    from './seconds'
+import * as settings        from './settings'
+import { Keys }             from './settings';
 
 clock.granularity = 'seconds'
 
@@ -40,56 +26,63 @@ const clockDigits: ClockDigits = {
 const hr = new HeartRateSensor()
 hr.start()
 
-initClockDigits(clockDigits)
-initDigitsColors(clockDigits)
-initDateElements()
-initBatteryElements()
+let displayChanged = true
 
-initSettings((settings: Settings) => {
+digits.init(clockDigits)
+colors.setDigitsColors(clockDigits)
+date.initElements()
+battery.initElements()
+
+settings.init((settings: Settings) => {
   // console.log('settings chnged')
 })
 
-updateDate()
+date.sync()
 
-addTapEventOnDate()
-addTapEventOnHours()
-addTapEventOnTopDigits()
-addTapEventOnBottomDigits()
+date.addTapEvent()
+hoursUtils.addTapEvent()
+digits.addTapEventOnTop()
+digits.addTapEventOnBottom()
 
-showActivitiesIfSettings()
-showBatteryIfSettings()
-showDateIfSettings()
+activities.showConditional()
+battery.showConditional()
+date.showConditional()
 
 clock.ontick = (event: TickEvent) => {
+  if (!display.on) return
+
   const hours = formatHours(event.date.getHours())
   const minutes = event.date.getMinutes()
   const seconds = event.date.getSeconds()
 
-  if (getSettingsValue(SettingsKeys.displayBatteryDate)) {
-    updateDateLazily(seconds)
-    updateBatteryLazily(seconds)
+  if (settings.getValue(Keys.displayBatteryDate)) {
+    date.updateLazily(seconds)
+    battery.updateLazily(seconds)
   }
 
-  // if (seconds % 10 === 0) {
-  //   checkSecondsPosition()
-  // }
+  if (displayChanged) {
+    hoursUtils.updateDigits(clockDigits.hours, hours)
+    minutesUtils.updateDigits(clockDigits.minutes, minutes)
+    secondsUtils.updateDigits(clockDigits.seconds, seconds)
 
-  updateHoursDigits(clockDigits.hours, hours)
-  updateMinutesDigits(clockDigits.minutes, minutes)
-  updateSecondsDigits(clockDigits.seconds, seconds)
+    displayChanged = false
 
-  startSecondsAnimation()
-  startMinutesAnimation(seconds)
-  startHoursAnimation(minutes, seconds)
-
-  if (getSettingsValue(SettingsKeys.displayActivities)) {
-    updateActivities(hr)
+  } else {
+    hoursUtils.updateDigitsLazily(clockDigits.hours, hours)
+    minutesUtils.updateDigitsLazily(clockDigits.minutes, minutes)
+    secondsUtils.updateDigitsLazily(clockDigits.seconds, seconds)
   }
+
+  secondsUtils.startAnimation()
+  minutesUtils.startAnimation(seconds)
+  hoursUtils.startAnimation(minutes, seconds)
+
+  activities.sync(hr)
 }
 
-display.addEventListener('change', () => {
+display.addEventListener('change', (event) => {
   if (display.on) {
-    // checkSecondsPosition()
+    displayChanged = true
     hr.start()
     return
   }

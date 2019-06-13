@@ -1,8 +1,10 @@
-import document from 'document'
-import { battery } from 'power'
-import { getForegroundColor, getBackgroundColor } from './colors';
-import { fadeIn, fadeOut } from './animationFactory';
-import { getSettingsValue, SettingsKeys } from './settings';
+import document         from 'document'
+import { battery }      from 'power'
+
+import * as animations  from './animations'
+import * as colors      from './colors'
+import * as settings    from './settings'
+import { Keys }         from './settings'
 
 const ELEMENTS: BatteryElements = {
   container: null,
@@ -21,7 +23,7 @@ const LEVELS: BatteryLevels = {
   circle3: 75,
 }
 
-export const initBatteryElements = () => {
+export const initElements = () => {
   ELEMENTS.container = document.getElementById('battery')
   ELEMENTS.circles.circle0 = document.getElementById('battery__circle-0')
   ELEMENTS.circles.circle1 = document.getElementById('battery__circle-1')
@@ -29,8 +31,9 @@ export const initBatteryElements = () => {
   ELEMENTS.circles.circle3 = document.getElementById('battery__circle-3')
 }
 
-export const showBatteryIfSettings = () => {
-  const batteryShouldBeVisible = getSettingsValue(SettingsKeys.displayBatteryDate)
+/** Show if settings allows it. */
+export const showConditional = () => {
+  const batteryShouldBeVisible = settings.getValue(Keys.displayBatteryDate)
 
   const batteryIsVisible = Object
     .keys(ELEMENTS.circles)
@@ -43,7 +46,7 @@ export const showBatteryIfSettings = () => {
 
   if (batteryShouldBeVisible !== batteryIsVisible) {
     const { circles } = ELEMENTS
-    const animationFun = batteryShouldBeVisible ? fadeIn : fadeOut
+    const animationFun = batteryShouldBeVisible ? animations.fadeIn : animations.fadeOut
 
     for (const key of Object.keys(circles)) {
       animationFun(circles[key])
@@ -51,17 +54,18 @@ export const showBatteryIfSettings = () => {
   }
 }
 
-export const toggleBattery = () => {
+/** Toggle visibility */
+export const toggle = () => {
   const { container } = ELEMENTS
   if (!container) return 'hidden'
 
-  const visibility = getSettingsValue(SettingsKeys.displayBatteryDate)
+  const visibility = settings.getValue(Keys.displayBatteryDate)
 
   if (visibility) {
     const { circles } = ELEMENTS
 
     for (const key of Object.keys(circles)) {
-      fadeOut(circles[key])
+      animations.fadeOut(circles[key])
     }
 
     return 'hidden'
@@ -70,14 +74,14 @@ export const toggleBattery = () => {
     const { circles } = ELEMENTS
 
     for (const key of Object.keys(circles)) {
-      fadeIn(circles[key])
+      animations.fadeIn(circles[key])
     }
 
     return 'visible'
   }
 }
 
-export const updateBattery = () => {
+function sync() {
   const { chargeLevel } = battery
   const { circles } = ELEMENTS
 
@@ -90,17 +94,17 @@ export const updateBattery = () => {
     const level = LEVELS[key]
 
     if (chargeLevel < level) {
-      circle.style.fill = getBackgroundColor()
+      circle.style.fill = colors.getBackgroundColor()
       circle.style.opacity = .5
     } else {
-      circle.style.fill = getForegroundColor()
+      circle.style.fill = colors.getForegroundColor()
       circle.style.opacity = 1
     }
   }
 }
 
-export const updateBatteryLazily = (seconds: number) => {
+export const updateLazily = (seconds: number) => {
   if (seconds % 5 !== 0) return
 
-  updateBattery()
+  sync()
 }

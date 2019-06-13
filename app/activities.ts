@@ -1,9 +1,11 @@
-import document from 'document'
-import { goals, today } from 'user-activity'
-import { getForegroundColor, getBackgroundColor } from './colors'
-import { getSettingsValue, SettingsKeys } from './settings'
-import { animateIntValue, fadeOut } from './animationFactory'
-import { HeartRateSensor } from 'heart-rate'
+import document             from 'document'
+import { HeartRateSensor }  from 'heart-rate'
+import { goals, today }     from 'user-activity'
+
+import * as animations      from './animations'
+import * as colors          from './colors'
+import * as settings        from './settings'
+import { Keys }             from './settings'
 
 const ACTIVITIES_LIST = [
   'steps',
@@ -17,7 +19,7 @@ const ACTIVITIES_LIST2 = [
   'distance',
 ]
 
-export const hideActivities = (listNumber: number) => {
+export const hide = (listNumber: number) => {
   const list = listNumber === 1 ? ACTIVITIES_LIST : ACTIVITIES_LIST2
 
   list.map((activity) => {
@@ -39,7 +41,7 @@ export const hideActivities = (listNumber: number) => {
   }, 500);
 }
 
-export const showActivities = (listNumber: number) => {
+export const show = (listNumber: number) => {
   const list = listNumber === 1 ? ACTIVITIES_LIST : ACTIVITIES_LIST2
   const rectActivities = document.getElementById(`activity-${listNumber}`)
 
@@ -59,28 +61,29 @@ export const showActivities = (listNumber: number) => {
   })
 }
 
-export const showActivitiesIfSettings = () => {
-  showTopActivitiesIfSettings()
-  showBottomActivitiesIfSettings()
+/** Show if settings allows it. */
+export const showConditional = () => {
+  showTopConditional()
+  showBottomConditional()
 }
 
-export const updateActivities = (hr?: HeartRateSensor) => {
-  if (getSettingsValue(SettingsKeys.displayActivities)) {
+export const sync = (hr?: HeartRateSensor) => {
+  if (settings.getValue(Keys.displayActivities)) {
     ACTIVITIES_LIST.map((activity) => {
       if (activity === 'hr') { updateHR(hr); return }
-      updateActivityValue(activity)
+      updateValue(activity)
     })
   }
 
-  if (getSettingsValue(SettingsKeys.displayActivities2)) {
+  if (settings.getValue(Keys.displayActivities2)) {
     ACTIVITIES_LIST2.map((activity) => {
-      updateActivityValue(activity)
+      updateValue(activity)
     })
   }
 }
 
-function showTopActivitiesIfSettings() {
-  const activitiesTopShouldBeVisible = getSettingsValue(SettingsKeys.displayActivities)
+function showTopConditional() {
+  const activitiesTopShouldBeVisible = settings.getValue(Keys.displayActivities)
 
   const elem = document.getElementById('activity-1')
   if (!elem) return
@@ -91,12 +94,12 @@ function showTopActivitiesIfSettings() {
     return
   }
 
-  if (activitiesTopShouldBeVisible) { showActivities(1) }
-  else { hideActivities(1) }
+  if (activitiesTopShouldBeVisible) { show(1) }
+  else { hide(1) }
 }
 
-function showBottomActivitiesIfSettings() {
-  const activitiesBottomShouldBeVisible = getSettingsValue(SettingsKeys.displayActivities2)
+function showBottomConditional() {
+  const activitiesBottomShouldBeVisible = settings.getValue(Keys.displayActivities2)
 
   const elem = document.getElementById('activity-2')
   if (!elem) return
@@ -107,11 +110,11 @@ function showBottomActivitiesIfSettings() {
     return
   }
 
-  if (activitiesBottomShouldBeVisible) { showActivities(2) }
-  else { hideActivities(2) }
+  if (activitiesBottomShouldBeVisible) { show(2) }
+  else { hide(2) }
 }
 
-function updateActivityValue(activity: string) {
+function updateValue(activity: string) {
   const textElem = document.getElementById(`activity__${activity}-text`)
   const iconElem = document.getElementById(`activity__${activity}-icon`)
 
@@ -122,15 +125,14 @@ function updateActivityValue(activity: string) {
   const goalValue: number = goals[activity] ? goals[activity] : 0
 
   textElem.text = `${value}`
-  // animateIntValue({ end: value, element: textElem })
 
   if (value >= goalValue) {
-    textElem.style.fill = getForegroundColor()
-    iconElem.style.fill = getForegroundColor()
+    textElem.style.fill = colors.getForegroundColor()
+    iconElem.style.fill = colors.getForegroundColor()
 
   } else {
-    textElem.style.fill = getBackgroundColor()
-    iconElem.style.fill = getBackgroundColor()
+    textElem.style.fill = colors.getBackgroundColor()
+    iconElem.style.fill = colors.getBackgroundColor()
   }
 }
 
@@ -144,9 +146,9 @@ function updateHR(hr?: HeartRateSensor) {
 
   textElem.text = hr.heartRate ? `${hr.heartRate}` : '--'
 
-  textElem.style.fill = getBackgroundColor()
-  iconElem.style.fill = getBackgroundColor()
+  textElem.style.fill = colors.getBackgroundColor()
+  iconElem.style.fill = colors.getBackgroundColor()
 
   iconElem.style.opacity = 1
-  fadeOut(iconElem)
+  animations.fadeOut(iconElem)
 }

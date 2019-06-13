@@ -1,14 +1,9 @@
-import document from 'document';
-import { fadeIn, fadeOut } from './animationFactory';
+import document             from 'document'
 
-import {
-  getSettingsValue,
-  SettingsKeys,
-  updateSettings,
-  DateFormat
-} from './settings';
-
-import { formatDigits } from '../common/format';
+import * as format          from '../common/format'
+import * as animations      from './animations'
+import * as settings        from './settings'
+import { DateFormat, Keys } from './settings'
 
 const ELEMENTS: DateElements = {
   container: null,
@@ -21,16 +16,16 @@ const ELEMENTS: DateElements = {
   },
 }
 
-export const addTapEventOnDate = () => {
+export const addTapEvent = () => {
   const rect = document.getElementById('actions-date')
   if(!rect) { return }
 
   rect.onclick = () => {
-    if (getSettingsValue(SettingsKeys.dateFormat) === DateFormat.dateMonth) {
+    if (settings.getValue(Keys.dateFormat) === DateFormat.dateMonth) {
       showDayDateMonthOnly()
 
-      updateSettings({
-        key: SettingsKeys.dateFormat,
+      settings.update({
+        key: Keys.dateFormat,
         value: DateFormat.dayDateMonth,
       })
 
@@ -39,14 +34,14 @@ export const addTapEventOnDate = () => {
 
     showDateMonthOnly()
 
-    updateSettings({
-      key: SettingsKeys.dateFormat,
+    settings.update({
+      key: Keys.dateFormat,
       value: DateFormat.dateMonth,
     })
   }
 }
 
-export const initDateElements = () => {
+export const initElements = () => {
   ELEMENTS.container = document.getElementById('date')
   ELEMENTS.children.day = document.getElementById('date__day')
   ELEMENTS.children.number = document.getElementById('date__number')
@@ -55,8 +50,9 @@ export const initDateElements = () => {
   ELEMENTS.children.numberMonth = document.getElementById('date__number-month')
 }
 
-export const showDateIfSettings = () => {
-  const dateShouldBeVisible = getSettingsValue(SettingsKeys.displayBatteryDate)
+/** Show if settings allows it. */
+export const showConditional = () => {
+  const dateShouldBeVisible = settings.getValue(Keys.displayBatteryDate)
 
   const dateIsVisible = Object
     .keys(ELEMENTS.children)
@@ -67,13 +63,13 @@ export const showDateIfSettings = () => {
       return result || (elem.style.opacity !== 0 && elem.style.visibility !== 'hidden')
     }, false)
 
-  if (getSettingsValue(SettingsKeys.dateFormat) === DateFormat.dateMonth) {
+  if (settings.getValue(Keys.dateFormat) === DateFormat.dateMonth) {
     showDateMonthOnly()
   }
 
   if (dateShouldBeVisible !== dateIsVisible) {
     const { children } = ELEMENTS
-    const animationFun = dateShouldBeVisible ? fadeIn : fadeOut
+    const animationFun = dateShouldBeVisible ? animations.fadeIn : animations.fadeOut
 
     for (const key of Object.keys(children)) {
       animationFun(children[key])
@@ -81,17 +77,18 @@ export const showDateIfSettings = () => {
   }
 }
 
-export const toggleDate = () => {
+/** Toggle visibility */
+export const toggle = () => {
   const { container } = ELEMENTS
   if (!container) return 'hidden'
 
-  const visibility = getSettingsValue(SettingsKeys.displayBatteryDate)
+  const visibility = settings.getValue(Keys.displayBatteryDate)
 
   if (visibility) {
     const { children } = ELEMENTS
 
     for (const key of Object.keys(children)) {
-      fadeOut(children[key])
+      animations.fadeOut(children[key])
     }
 
     return 'hidden'
@@ -100,14 +97,14 @@ export const toggleDate = () => {
     const { children } = ELEMENTS
 
     for (const key of Object.keys(children)) {
-      fadeIn(children[key])
+      animations.fadeIn(children[key])
     }
 
     return 'visible'
   }
 }
 
-export const updateDate = () => {
+export const sync = () => {
   const today = new Date()
   const day = numberToDay(today.getDay())
   const month = numberToMonth(today.getMonth())
@@ -116,13 +113,13 @@ export const updateDate = () => {
   if (ELEMENTS.children.day) { ELEMENTS.children.day.text = day }
   if (ELEMENTS.children.month) { ELEMENTS.children.month.text = month }
   if (ELEMENTS.children.number) { ELEMENTS.children.number.text = `${number}` }
-  if (ELEMENTS.children.numberDay) { ELEMENTS.children.numberDay.text = formatDigits(number) }
-  if (ELEMENTS.children.numberMonth) { ELEMENTS.children.numberMonth.text = formatDigits(today.getMonth() + 1) }
+  if (ELEMENTS.children.numberDay) { ELEMENTS.children.numberDay.text = format.formatDigits(number) }
+  if (ELEMENTS.children.numberMonth) { ELEMENTS.children.numberMonth.text = format.formatDigits(today.getMonth() + 1) }
 }
 
-export const updateDateLazily = (seconds: number) => {
+export const updateLazily = (seconds: number) => {
   if (seconds % 5 !== 0) { return }
-  updateDate()
+  sync()
 }
 
 function numberToDay(n: number) {

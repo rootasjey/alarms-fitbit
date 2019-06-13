@@ -1,17 +1,18 @@
-import document from 'document'
+import document         from 'document'
 
-import { formatDigits } from '../common/format'
-import { getSettingsValue, SettingsKeys, updateSettings } from './settings';
-import { hideActivities, showActivities, updateActivities } from './activities';
+import * as format      from '../common/format'
+import * as activities  from './activities'
+import * as settings    from './settings'
+import { Keys }         from './settings'
 
-export const addTapEventOnBottomDigits = () => {
+export const addTapEventOnBottom = () => {
   const rect = document.getElementById('actions-bottom-clock')
   if (!rect) return
 
   rect.addEventListener('click', () => { onTapRectActivities(2) })
 }
 
-export const addTapEventOnTopDigits = () => {
+export const addTapEventOnTop = () => {
   const rect = document.getElementById('actions-top-clock')
   if (!rect) return
 
@@ -22,7 +23,7 @@ export const addTapEventOnTopDigits = () => {
  * Retrieve DOM elements to display the clock.
  * @param clockDigits Empty array that will contain DOM elements
  */
-export const initClockDigits = (clockDigits: ClockDigits) => {
+export const init = (clockDigits: ClockDigits) => {
   const numbers = [0, 1, 2, 3]
 
   numbers.map((value) => {
@@ -52,18 +53,18 @@ export const initClockDigits = (clockDigits: ClockDigits) => {
  * @param arrDigits Array of DOM elements of the clock.
  * @param values Text values to set for each DOM elements.
  */
-export const updateDigits = (arrDigits: Element[], values: number[]) => {
+export const update = (arrDigits: Element[], values: number[]) => {
   arrDigits.map((digit, index) => {
-    digit.text = formatDigits(values[index])
+    digit.text = format.formatDigits(values[index])
   })
 }
 
 function onTapRectActivities(groupNumber: number) {
   const rectActivities = document.getElementById(`activity-${groupNumber}`)
 
-  const key = groupNumber === 1 ? SettingsKeys.displayActivities : SettingsKeys.displayActivities2
+  const key = groupNumber === 1 ? Keys.displayActivities : Keys.displayActivities2
 
-  const visibility = getSettingsValue(key)
+  const visibility = settings.getValue(key)
 
   const newVisibility = !visibility
 
@@ -71,15 +72,15 @@ function onTapRectActivities(groupNumber: number) {
 
   if (newVisibility) {
     rectActivities.style.opacity = 1
-    showActivities(groupNumber)
-    updateActivities()
+    activities.show(groupNumber)
+    activities.sync()
 
   } else {
     rectActivities.style.opacity = 0
-    hideActivities(groupNumber)
+    activities.hide(groupNumber)
   }
 
-  updateSettings({
+  settings.update({
     key,
     value: newVisibility,
   })

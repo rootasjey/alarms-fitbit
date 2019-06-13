@@ -11,7 +11,7 @@ export const setForegroundColor = (newColor: string) => COLORS.foreground = newC
  * Set the initial color on the foreground clock digits.
  * @param clockDigits Array of DOM elements representing clock digits.
  */
-export const initDigitsColors = (clockDigits: ClockDigits) => {
+export const setDigitsColors = (clockDigits: ClockDigits) => {
   clockDigits.hours.some(setColorOnMiddleHourMinutes)
   clockDigits.minutes.some(setColorOnMiddleHourMinutes)
 

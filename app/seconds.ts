@@ -1,37 +1,15 @@
-import document from 'document'
+import document         from 'document'
 
-import { FinalType } from '../common/enumerations'
-import { formatDigits, formatMinSec } from '../common/format'
-import { createDigitsAnimation } from './animationFactory'
-import { updateDigits } from './digits'
-
-export const checkSecondsPosition = () => {
-  const hashInt: IntegerHash = {};
-
-  [0, 1, 2, 3].map((value) => {
-    const elem = document.getElementById(`seconds-digits-${value}`)
-    if (!elem) return
-
-    const mapEntry = hashInt[elem.y]
-    hashInt[elem.y] = typeof mapEntry === 'number' ? mapEntry + 1 : 0
-  })
-
-  let overStepped = false
-
-  for (const key of Object.keys(hashInt)) {
-    if (hashInt[key] > 1) { overStepped = true }
-  }
-
-  // console.log(overStepped)
-
-  if (overStepped) {
-    resetSecondsPosition()
-    // console.log('re-ajusted seconds')
-  }
-}
+import { FinalType }    from '../common/enumerations'
+import * as format      from '../common/format'
+import * as animations  from './animations'
+import * as digits      from './digits'
+import * as layout      from './layout'
 
 /** Start seconds animation. */
-export const startSecondsAnimation = () => {
+export const startAnimation = () => {
+  resetPosition();
+
   [0, 1, 2, 3]
     .map((n) => {
       const element = document.getElementById(`seconds-digits-${n}`)
@@ -40,20 +18,28 @@ export const startSecondsAnimation = () => {
       const startY = element.y
       const endY = getNextY(startY)
       const finalType = getNextAnimationType(startY)
-      const animation = createDigitsAnimation({ startY, endY, element, finalType, resetYto: 210 })
+      const animation = animations.createDigitsAnimation({ startY, endY, element, finalType, resetYto: 210 })
 
       animation.start()
     })
 }
 
-export const updateSecondsDigits = (arrDigits: Element[], value: number = 0) => {
-  const currPlusTwoValue = formatMinSec(value + 2)
+export const updateDigits = (arrDigits: Element[], value: number = 0) => {
+  const prevValue = format.formatMinSec(value - 1)
+  const nextValue = format.formatMinSec(value + 1)
+  const currPlusTwoValue = format.formatMinSec(value + 2)
+
+  digits.update(arrDigits, [prevValue, value, nextValue, currPlusTwoValue])
+}
+
+export const updateDigitsLazily = (arrDigits: Element[], value: number = 0) => {
+  const currPlusTwoValue = format.formatMinSec(value + 2)
 
   // Subsequent runs
   if (arrDigits.length > 1 && arrDigits[0].text.length > 1) {
     arrDigits.some((digits) => {
       if (digits.y === 210) {
-        digits.text = formatDigits(currPlusTwoValue)
+        digits.text = format.formatDigits(currPlusTwoValue)
         return true
       }
 
@@ -64,10 +50,10 @@ export const updateSecondsDigits = (arrDigits: Element[], value: number = 0) => 
   }
 
   // First run
-  const prevValue = formatMinSec(value - 1)
-  const nextValue = formatMinSec(value + 1)
+  const prevValue = format.formatMinSec(value - 1)
+  const nextValue = format.formatMinSec(value + 1)
 
-  updateDigits(arrDigits, [prevValue, value, nextValue, currPlusTwoValue])
+  digits.update(arrDigits, [prevValue, value, nextValue, currPlusTwoValue])
 }
 
 /** Returns next animation type according to the current Y coordinate. */
@@ -104,19 +90,27 @@ function getNextY(currentY: number) {
   }
 }
 
-function resetSecondsPosition() {
-  // TODO: use device-based dimensions
-  const dimensions: IntegerHash = {
-    0: 120,
-    1: 150,
-    2: 180,
-    3: 210,
-  };
+/** Reset Y position of seconds visual elements (it desync sometimes). */
+function resetPosition() {
+  [0, 1, 2, 3]
+    .map((n) => {
+      return document.getElementById(`seconds-digits-${n}`)
+    })
+    .sort((a, b) => {
+      if (!a || !b) return 0
 
-  [0, 1, 2, 3].map((value) => {
-    const elem = document.getElementById(`seconds-digits-${value}`)
-    if (!elem) return
+      const aValue = parseInt(a.text)
+      const bValue = parseInt(b.text)
 
-    elem.y = dimensions[value]
-  })
+      // NOTE: Special case 59 -> 0
+      if (aValue > 56 && bValue < 4) return -1
+      if (aValue < 4 && bValue > 56) return 1
+
+      return aValue - bValue
+    })
+    .map((element, index) => {
+      if (!element) return
+
+      element.y = layout.getSecondesPositionY(index)
+    })
 }

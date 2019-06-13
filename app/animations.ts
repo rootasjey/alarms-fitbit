@@ -1,6 +1,5 @@
-import { FinalType } from '../common/enumerations'
-import { getForegroundColor, getBackgroundColor } from './colors';
-
+import { FinalType }  from '../common/enumerations'
+import * as colors    from './colors'
 
 export const animateIntValue = (config: AnimateIntValueConfig) => {
   const { start, end, element } = config
@@ -33,7 +32,7 @@ export const animateIntValue = (config: AnimateIntValueConfig) => {
   }
 }
 
-export function createDigitsAnimation(config: CreateDigitsAnimationConfig) {
+export const createDigitsAnimation = (config: CreateDigitsAnimationConfig) => {
   const {
     startY,
     endY,
@@ -70,11 +69,11 @@ export function createDigitsAnimation(config: CreateDigitsAnimationConfig) {
         break
       case 'foreground':
         element.style.opacity = 1
-        element.style.fill = getForegroundColor()
+        element.style.fill = colors.getForegroundColor()
         break
       case 'background':
         element.style.opacity = .5
-        element.style.fill = getBackgroundColor()
+        element.style.fill = colors.getBackgroundColor()
         break
 
       default:
@@ -87,7 +86,7 @@ export function createDigitsAnimation(config: CreateDigitsAnimationConfig) {
   }
 }
 
-export function fadeIn(elem: Element | null) {
+export const fadeIn = (elem: Element | null) => {
   if (!elem) return
 
   const opacityStep = .05
@@ -104,7 +103,7 @@ export function fadeIn(elem: Element | null) {
   requestAnimationFrame(animation)
 }
 
-export function fadeOut(elem: Element | null) {
+export const fadeOut = (elem: Element | null) => {
   if (!elem) return
 
   const opacityStep = .05
@@ -150,49 +149,4 @@ function getNextOpacity(config: GetNextOpacityConfig) {
   }
 
   return parseFloat(nextOpacity.toFixed(2))
-}
-
-
-function grow(imageElement: ImageElement, add: number) {
-  const startW = imageElement.width
-  const startH = imageElement.height
-
-  const endW = startW + add
-  const endH = startH + add
-
-  const animation = (timestamp: number) => {
-    if (imageElement.width >= endW &&
-      imageElement.height >= endH) {
-      return
-    }
-
-    imageElement.width += 1
-    imageElement.height += 1
-
-    requestAnimationFrame(animation)
-  }
-
-  requestAnimationFrame(animation)
-}
-
-function shrink(imageElement: ImageElement, sub: number) {
-  const startW = imageElement.width
-  const startH = imageElement.height
-
-  const endW = startW - sub
-  const endH = startH - sub
-
-  const animation = (timestamp: number) => {
-    if (imageElement.width <= endW &&
-      imageElement.height <= endH) {
-      return
-    }
-
-    imageElement.width -= 1
-    imageElement.height -= 1
-
-    requestAnimationFrame(animation)
-  }
-
-  requestAnimationFrame(animation)
 }
