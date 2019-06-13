@@ -7,20 +7,38 @@ import * as battery     from './battery'
 import * as date        from './date'
 import * as digtis      from './digits'
 import * as settings    from './settings'
+import { Keys }         from './settings';
 
 /** Toggle date and battery when tapping on hours. */
 export const addTapEvent = () => {
   const rect = document.getElementById('actions-hours')
-  if (!rect) return
+  if (!rect) { return }
 
   rect.addEventListener('click', () => {
-    const dateVisibility = date.toggle()
-    const batteryVisibility = battery.toggle()
+    if (settings.getValue(Keys.isHoursTapOn) === false) {
+      return
+    }
 
-    settings.update({
-      key: 'displayBatteryDate',
-      value: dateVisibility === 'visible' && batteryVisibility === 'visible'
+    settings.setValue({
+      key: Keys.isHoursTapOn,
+      value: false,
     })
+
+    const dateToggleProm = date.toggle()
+    const batteryToggleProm = battery.toggle()
+
+    Promise.all([dateToggleProm, batteryToggleProm])
+      .then((result) => {
+        settings.setValue({
+          key: Keys.displayBatteryDate,
+          value: result[0].action === 'visible' && result[1].action === 'visible'
+        })
+
+        settings.setValue({
+          key: Keys.isHoursTapOn,
+          value: true,
+        })
+      })
   })
 }
 

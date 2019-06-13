@@ -80,7 +80,7 @@ function onTapRectActivities(groupNumber: number) {
     activities.hide(groupNumber)
   }
 
-  settings.update({
+  settings.setValue({
     key,
     value: newVisibility,
   })

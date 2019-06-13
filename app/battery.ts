@@ -57,18 +57,24 @@ export const showConditional = () => {
 /** Toggle visibility */
 export const toggle = () => {
   const { container } = ELEMENTS
-  if (!container) return 'hidden'
+  if (!container) {
+    return Promise.resolve({ success: false, action: 'none' })
+  }
 
   const visibility = settings.getValue(Keys.displayBatteryDate)
+
+  const animationsPromises = []
+  let action = ''
 
   if (visibility) {
     const { circles } = ELEMENTS
 
     for (const key of Object.keys(circles)) {
-      animations.fadeOut(circles[key])
+      const animation = animations.fadeOut(circles[key])
+      animationsPromises.push(animation)
     }
 
-    return 'hidden'
+    action = 'hidden'
 
   } else {
     const { circles } = ELEMENTS
@@ -77,8 +83,13 @@ export const toggle = () => {
       animations.fadeIn(circles[key])
     }
 
-    return 'visible'
+    action = 'visible'
   }
+
+  return Promise.all(animationsPromises)
+    .then((resultArray) => {
+      return { success: true, action }
+    })
 }
 
 function sync() {

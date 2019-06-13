@@ -19,19 +19,21 @@ export enum DateFormat {
 }
 
 export enum Keys {
-  dateFormat = 'dateFormat',
-  displayActivities = 'displayActivities',
-  displayActivities2 = 'displayActivities2',
-  displayBatteryDate = 'displayBatteryDate',
+  dateFormat          = 'dateFormat',
+  displayActivities   = 'displayActivities',
+  displayActivities2  = 'displayActivities2',
+  displayBatteryDate  = 'displayBatteryDate',
+  isHoursTapOn        = 'isHoursTapOn',
 }
 
 let onsettingschange: Function
 
 let settings: Settings = {
-  dateFormat: DateFormat.dayDateMonth,
-  displayActivities: false,
-  displayActivities2: false,
-  displayBatteryDate: false,
+  dateFormat          : DateFormat.dayDateMonth,
+  displayActivities   : false,
+  displayActivities2  : false,
+  displayBatteryDate  : false,
+  isHoursTapOn        : true,
 }
 
 export function init(callback: Function) {
@@ -46,7 +48,7 @@ export function getValue(key = '') {
   return undefined
 }
 
-export function update(config: SettingsUpdateConfig) {
+export function setValue(config: SettingsUpdateConfig) {
   const { key, value } = config
   settings[key] = value
 }

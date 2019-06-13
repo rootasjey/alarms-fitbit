@@ -24,7 +24,7 @@ export const addTapEvent = () => {
     if (settings.getValue(Keys.dateFormat) === DateFormat.dateMonth) {
       showDayDateMonthOnly()
 
-      settings.update({
+      settings.setValue({
         key: Keys.dateFormat,
         value: DateFormat.dayDateMonth,
       })
@@ -34,7 +34,7 @@ export const addTapEvent = () => {
 
     showDateMonthOnly()
 
-    settings.update({
+    settings.setValue({
       key: Keys.dateFormat,
       value: DateFormat.dateMonth,
     })
@@ -80,28 +80,40 @@ export const showConditional = () => {
 /** Toggle visibility */
 export const toggle = () => {
   const { container } = ELEMENTS
-  if (!container) return 'hidden'
+  if (!container) {
+    return Promise.resolve({ success: false, action: 'none' })
+  }
 
   const visibility = settings.getValue(Keys.displayBatteryDate)
+
+  const animationsPromises = []
+  let action = ''
 
   if (visibility) {
     const { children } = ELEMENTS
 
     for (const key of Object.keys(children)) {
-      animations.fadeOut(children[key])
+      const animation = animations.fadeOut(children[key])
+      animationsPromises.push(animation)
     }
 
-    return 'hidden'
+    action = 'hidden'
 
   } else {
     const { children } = ELEMENTS
 
     for (const key of Object.keys(children)) {
-      animations.fadeIn(children[key])
+      const animation = animations.fadeIn(children[key])
+      animationsPromises.push(animation)
     }
 
-    return 'visible'
+    action = 'visible'
   }
+
+  return Promise.all(animationsPromises)
+    .then((result) => {
+      return { success: true, action }
+    })
 }
 
 export const sync = () => {

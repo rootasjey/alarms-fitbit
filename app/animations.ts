@@ -86,38 +86,51 @@ export const createDigitsAnimation = (config: CreateDigitsAnimationConfig) => {
   }
 }
 
-export const fadeIn = (elem: Element | null) => {
-  if (!elem) return
-
-  const opacityStep = .05
-
-  const animation = (timestamp: number) => {
-    if (elem.style.opacity >= 1) return
-
-    const newOpacity = (elem.style.opacity + opacityStep).toFixed(2)
-    elem.style.opacity = parseFloat(newOpacity)
-
-    requestAnimationFrame(animation)
+export const fadeIn = (elem: Element | null): Promise<{ success: boolean }> => {
+  if (!elem) {
+    return Promise.resolve({ success: true })
   }
 
-  requestAnimationFrame(animation)
+  const opacityStep = .20
+
+  return new Promise((resolve, reject) => {
+    const animation = (timestamp: number) => {
+      if (elem.style.opacity >= 1) {
+        return resolve({ success: true })
+      }
+
+      const newOpacity = (elem.style.opacity + opacityStep).toFixed(2)
+      elem.style.opacity = parseFloat(newOpacity)
+
+      requestAnimationFrame(animation)
+    }
+
+    requestAnimationFrame(animation)
+  })
+
 }
 
-export const fadeOut = (elem: Element | null) => {
-  if (!elem) return
-
-  const opacityStep = .05
-
-  const animation = (timestamp: number) => {
-    if (elem.style.opacity <= 0) return
-
-    const newOpacity = (elem.style.opacity - opacityStep).toFixed(2)
-    elem.style.opacity = parseFloat(newOpacity)
-
-    requestAnimationFrame(animation)
+export const fadeOut = (elem: Element | null): Promise<{ success: boolean }> => {
+  if (!elem) {
+    return Promise.resolve({ success: true })
   }
 
-  requestAnimationFrame(animation)
+  const opacityStep = .20
+
+  return new Promise((resolve, reject) => {
+    const animation = (timestamp: number) => {
+      if (elem.style.opacity <= 0) {
+        return resolve({ success: true })
+      }
+
+      const newOpacity = (elem.style.opacity - opacityStep).toFixed(2)
+      elem.style.opacity = parseFloat(newOpacity)
+
+      requestAnimationFrame(animation)
+    }
+
+    requestAnimationFrame(animation)
+  })
 }
 
 function getNextOpacity(config: GetNextOpacityConfig) {
