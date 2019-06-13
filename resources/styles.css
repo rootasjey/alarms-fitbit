@@ -30,7 +30,7 @@
 
 .date {
   fill: white;
-  font-size: 20;
+  font-size: 28;
 }
 
 #digits-separator {
@@ -41,10 +41,12 @@
 
 #date__number-day {
   text-length: 32;
+  font-size: 34;
 }
 
 #date__number-month {
   text-length: 32;
+  font-size: 34;
 }
 
 .seconds {
