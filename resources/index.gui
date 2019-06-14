@@ -43,35 +43,35 @@
 
     <rect id="activity-1" x="55" y="0" height="70" width="240" fill="black" opacity="0" visibility="hidden">
       <g>
-        <image id="activity__steps-icon" href="icons/activities/steps.png" x="60" y="10" width="20" height="20" opacity="0" />
-        <text id="activity__steps-text" class="activity" x="90" y="25" opacity="0" />
-      </g>
-
-      <g>
-        <image id="activity__elevationGain-icon" href="icons/activities/elevationGain.png" x="60" y="35" width="20" height="20" opacity="0" />
+        <image id="activity__elevationGain-icon" href="icons/activities/elevationGain.png" x="60" y="30" width="20" height="20" opacity="0" />
         <text id="activity__elevationGain-text" class="activity" x="90" y="50" opacity="0" />
       </g>
 
       <g>
-        <image id="activity__hr-icon" href="icons/activities/hr.png" x="60" y="58" width="20" height="20" opacity="0" />
-        <text id="activity__hr-text" class="activity" x="90" y="75" opacity="0" />
+        <image id="activity__hr-icon" href="icons/activities/hr.png" x="220" y="30" width="20" height="20" opacity="0" />
+        <text id="activity__hr-text" class="activity" x="250" y="50" opacity="0" />
       </g>
     </rect>
 
     <rect id="activity-2" x="55" y="160" height="90" width="240" fill="black" opacity="0" visibility="hidden">
       <g>
-        <image id="activity__activeMinutes-icon" href="icons/activities/activeMinutes.png" x="190" y="160" width="20" height="20" opacity="0" />
-        <text id="activity__activeMinutes-text" class="activity" x="220" y="175" opacity="0" />
+        <image id="activity__steps-icon" href="icons/activities/steps.png" x="60" y="185" width="20" height="20" opacity="0" />
+        <text id="activity__steps-text" class="activity" x="90" y="205" opacity="0" />
       </g>
 
       <g>
-        <image id="activity__calories-icon" href="icons/activities/calories.png" x="190" y="185" width="20" height="20" opacity="0" />
-        <text id="activity__calories-text" class="activity" x="220" y="200" opacity="0" />
+        <image id="activity__activeMinutes-icon" href="icons/activities/activeMinutes.png" x="220" y="185" width="20" height="20" opacity="0" />
+        <text id="activity__activeMinutes-text" class="activity" x="250" y="205" opacity="0" />
       </g>
 
       <g>
-        <image id="activity__distance-icon" href="icons/activities/distance.png" x="190" y="210" width="20" height="20" opacity="0" />
-        <text id="activity__distance-text" class="activity" x="220" y="225" opacity="0" />
+        <image id="activity__calories-icon" href="icons/activities/calories.png" x="60" y="220" width="20" height="20" opacity="0" />
+        <text id="activity__calories-text" class="activity" x="90" y="240" opacity="0" />
+      </g>
+
+      <g>
+        <image id="activity__distance-icon" href="icons/activities/distance.png" x="190" y="220" width="20" height="20" opacity="0" />
+        <text id="activity__distance-text" class="activity" x="220" y="240" opacity="0" />
       </g>
     </rect>
 

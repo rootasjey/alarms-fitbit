@@ -8,13 +8,13 @@ import * as settings        from './settings'
 import { Keys }             from './settings'
 
 const ACTIVITIES_LIST = [
-  'steps',
   'elevationGain',
   'hr',
 ]
 
 const ACTIVITIES_LIST2 = [
   'activeMinutes',
+  'steps',
   'calories',
   'distance',
 ]
@@ -70,8 +70,8 @@ export const show = (listNumber: number): Promise<{ success: boolean, action: 'h
 
     if (!textElem || !iconElem) return
 
-    const animText = animations.fadeIn({ element: textElem })
-    const animIcon = animations.fadeIn({ element: iconElem })
+    const animText = animations.fadeIn({ element: textElem, endValue: .5 })
+    const animIcon = animations.fadeIn({ element: iconElem, endValue: .5 })
 
     arrayAnimations.push(animText, animIcon)
   })
