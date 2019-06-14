@@ -25,6 +25,7 @@ export function startAnimation(seconds: number) {
         finalType,
         resetYto: 390,
         hideAfterAnimation: false,
+        step: 4,
       })
 
       animation.start()

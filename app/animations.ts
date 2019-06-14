@@ -34,20 +34,21 @@ export const animateIntValue = (config: AnimateIntValueConfig) => {
 
 export const createDigitsAnimation = (config: CreateDigitsAnimationConfig) => {
   const {
-    startY,
-    endY,
     element,
+    endY,
     finalType,
+    hideAfterAnimation,
     resetYto,
-    hideAfterAnimation
+    startY,
+    step,
   } = config
 
   let count = startY
-  const step = 2
+  const stepValue = typeof step === 'number' ? step : 2
 
   function animateDigits(timestamp: number) {
     if (count > endY) {
-      count = count - step
+      count = count - stepValue
       element.y = count
 
       const { opacity: currentOpacity } = element.style;

@@ -62,6 +62,7 @@ export const startAnimation = (minutes: number, seconds: number) => {
         finalType,
         resetYto: 390,
         hideAfterAnimation: false,
+        step: 4,
       })
 
       animation.start()
