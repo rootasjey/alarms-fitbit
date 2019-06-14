@@ -103,8 +103,11 @@ function resetPosition() {
       const bValue = parseInt(b.text)
 
       // NOTE: Special case 59 -> 0
-      if (aValue > 56 && bValue < 4) return -1
-      if (aValue < 4 && bValue > 56) return 1
+      // if (aValue > 56 && bValue < 4) return -1
+      // if (aValue < 4 && bValue > 56) return 1
+
+      if (aValue > 56 && bValue < 54) return -1
+      if (aValue < 54 && bValue > 56) return 1
 
       return aValue - bValue
     })
