@@ -145,7 +145,7 @@ function updateValue(activity: string) {
   const value: number = today.local[activity] ? today.local[activity] : 0
   const goalValue: number = goals[activity] ? goals[activity] : 0
 
-  textElem.text = `${value}`
+  textElem.text = value > 1000000 ? `${value / 1000000}M` : `${value}`
 
   if (value >= goalValue) {
     textElem.style.fill = colors.getForegroundColor()
