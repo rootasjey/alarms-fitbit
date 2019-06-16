@@ -109,6 +109,15 @@ interface MultiLayoutHash {
   Versa: IntegerHash;
 }
 
+interface MultiLayoutNestedHash {
+  Ionic: {
+    [key: string]: IntegerHash;
+  };
+  Versa: {
+    [key: string]: IntegerHash;
+  };
+}
+
 interface Settings {
   [key: string]: string | number | boolean;
   dateFormat: DateFormat;

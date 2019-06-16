@@ -3,6 +3,7 @@ import { battery }      from 'power'
 
 import * as animations  from './animations'
 import * as colors      from './colors'
+import * as layout      from './layout'
 import * as settings    from './settings'
 import { Keys }         from './settings'
 
@@ -93,12 +94,14 @@ export const toggle = () => {
 }
 
 function sync() {
-  const { chargeLevel } = battery
+  const { chargeLevel, charging } = battery
   const { circles } = ELEMENTS
+
+  const position = layout.getBatteryPositionY(chargeLevel, charging)
 
   for (const key of Object.keys(circles)) {
     const element = circles[key]
-    const circle = circles[key]
+    const circle = circles[key] as CircleElement
 
     if (!element || !circle) continue
 
@@ -111,6 +114,8 @@ function sync() {
       circle.style.fill = colors.getForegroundColor()
       circle.style.opacity = 1
     }
+
+    circle.cy = position[key]
   }
 }
 
