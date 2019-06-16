@@ -21,6 +21,8 @@ export const addTapEvent = () => {
   if(!rect) { return }
 
   rect.onclick = () => {
+    if (!settings.getValue(Keys.displayBatteryDate)) return
+
     if (settings.getValue(Keys.dateFormat) === DateFormat.dateMonth) {
       showDayDateMonthOnly()
 
