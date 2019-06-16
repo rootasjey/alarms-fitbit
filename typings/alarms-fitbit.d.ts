@@ -124,8 +124,10 @@ interface Settings {
   displayActivities: boolean;
   displayActivities2: boolean;
   displayBatteryDate: boolean;
+  displaySeconds: boolean;
   isBottomDigitTapOn: boolean;
   isHoursTapOn: boolean;
+  isMinutesTapOn: boolean;
   isTopDigitTapOn: boolean;
 }
 

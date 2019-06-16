@@ -43,6 +43,7 @@ date.sync()
 
 date.addTapEvent()
 hoursUtils.addTapEvent()
+minutesUtils.addTapEvent()
 digits.addTapEventOnTop()
 digits.addTapEventOnBottom()
 
@@ -65,17 +66,26 @@ clock.ontick = (event: TickEvent) => {
   if (displayChanged) {
     hoursUtils.updateDigits(clockDigits.hours, hours)
     minutesUtils.updateDigits(clockDigits.minutes, minutes)
-    secondsUtils.updateDigits(clockDigits.seconds, seconds)
+
+    if (settings.getValue(Keys.displaySeconds)) {
+      secondsUtils.updateDigits(clockDigits.seconds, seconds)
+    }
 
     displayChanged = false
 
   } else {
     hoursUtils.updateDigitsLazily(clockDigits.hours, hours)
     minutesUtils.updateDigitsLazily(clockDigits.minutes, minutes)
-    secondsUtils.updateDigitsLazily(clockDigits.seconds, seconds)
+
+    if (settings.getValue(Keys.displaySeconds)) {
+      secondsUtils.updateDigitsLazily(clockDigits.seconds, seconds)
+    }
   }
 
-  secondsUtils.startAnimation()
+  if (settings.getValue(Keys.displaySeconds)) {
+    secondsUtils.startAnimation()
+  }
+
   minutesUtils.startAnimation(seconds)
   hoursUtils.startAnimation(minutes, seconds)
 

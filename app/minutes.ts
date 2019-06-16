@@ -4,6 +4,41 @@ import { FinalType }    from '../common/enumerations'
 import * as format      from '../common/format'
 import * as animations  from './animations'
 import * as digits      from './digits'
+import * as seconds     from './seconds'
+import * as settings    from './settings'
+import { Keys }         from './settings'
+
+/** Toggle seconds when tapping on minutes */
+export const addTapEvent = () => {
+  const rect = document.getElementById('actions-minutes')
+  if (!rect) { return }
+
+  rect.addEventListener('click', () => {
+    if (settings.getValue(Keys.isMinutesTapOn) === false) {
+      return
+    }
+
+    settings.setValue({
+      key: Keys.isMinutesTapOn,
+      value: false,
+    })
+
+    seconds.toggle()
+      .then((result) => {
+        const { action } = result
+
+        settings.setValue({
+          key: Keys.displaySeconds,
+          value: action === 'visible',
+        })
+
+        settings.setValue({
+          key: Keys.isMinutesTapOn,
+          value: true,
+        })
+      })
+  })
+}
 
 /** Start minutes animation. */
 export function startAnimation(seconds: number) {

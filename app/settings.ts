@@ -23,8 +23,10 @@ export enum Keys {
   displayActivities   = 'displayActivities',
   displayActivities2  = 'displayActivities2',
   displayBatteryDate  = 'displayBatteryDate',
+  displaySeconds      = 'displaySeconds',
   isBottomDigitTapOn  = 'isBottomDigitTapOn',
   isHoursTapOn        = 'isHoursTapOn',
+  isMinutesTapOn      = 'isMinutesTapOn',
   isTopDigitTapOn     = 'isTopDigitTapOn',
 }
 
@@ -35,21 +37,37 @@ let settings: Settings = {
   displayActivities   : false,
   displayActivities2  : false,
   displayBatteryDate  : false,
+  displaySeconds      : true,
   isBottomDigitTapOn  : true,
   isHoursTapOn        : true,
+  isMinutesTapOn      : true,
+  isTopDigitTapOn     : true,
+}
+
+const settingsDefaultValues: Settings = {
+  dateFormat          : DateFormat.dayDateMonth,
+  displayActivities   : false,
+  displayActivities2  : false,
+  displayBatteryDate  : false,
+  displaySeconds      : true,
+  isBottomDigitTapOn  : true,
+  isHoursTapOn        : true,
+  isMinutesTapOn      : true,
   isTopDigitTapOn     : true,
 }
 
 export const init = (callback: Function) => {
   settings = load()
-  // console.log(JSON.stringify(settings))
+
   onsettingschange = callback
   onsettingschange(settings)
 }
 
 export const getValue = (key = '') => {
-  if (key.length > 0) return settings[key]
-  return undefined
+  if (key.length < 1) return undefined
+
+  return typeof settings[key] !== 'undefined' ?
+    settings[key] : settingsDefaultValues[key]
 }
 
 export const resetUILocks = () => {
