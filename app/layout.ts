@@ -83,10 +83,10 @@ export const getNextAnimationType = (config: LayoutPositionConfig): FinalType =>
         460: FinalType.background,
       },
       seconds: {
-        120: FinalType.hide,
-        150: FinalType.background,
-        180: FinalType.foreground,
-        210: FinalType.background,
+        150: FinalType.hide,
+        180: FinalType.background,
+        210: FinalType.foreground,
+        240: FinalType.background,
       },
     },
   }
@@ -142,10 +142,10 @@ export const getNextY = (config: LayoutPositionConfig) => {
         [vN4]: vN3,
       },
       seconds: {
-        120: 90,
-        150: 120,
+        150: 110,
         180: 150,
         210: 180,
+        240: 210,
       },
     },
   }
@@ -163,7 +163,7 @@ export const getResetYTo = (type: 'hours' | 'minutes' | 'seconds') => {
     Versa: {
       hours: 460,
       minutes: 460,
-      seconds: 210,
+      seconds: 240,
     },
   }
 
@@ -200,10 +200,10 @@ export const getSecondsPositionY = (index: number) => {
       3: 210,
     },
     Versa: {
-      0: 120,
-      1: 150,
-      2: 180,
-      3: 210,
+      0: 150,
+      1: 180,
+      2: 210,
+      3: 240,
     }
   }
 
@@ -221,6 +221,11 @@ export const setPositionClock = (digits: ClockDigits) => {
     Versa: [ 40, 180, 320, 460 ],
   }
 
+  const ySecondsPosition = {
+    Ionic: [ 120, 150, 180, 210 ],
+    Versa: [ 150, 180, 210, 240 ],
+  }
+
   const xPositions = {
     Ionic: {
       hour: 60,
@@ -236,21 +241,23 @@ export const setPositionClock = (digits: ClockDigits) => {
 
   digits.hours.map((element, index) => {
     const textElement = element as TextElement
-    textElement.x = xPositions[deviceType].hour
 
+    textElement.x = xPositions[deviceType].hour
     textElement.y = yHourMinutesPosition[deviceType][index];
   })
 
   digits.minutes.map((element, index) => {
     const textElement = element as TextElement
-    textElement.x = xPositions[deviceType].minutes
 
+    textElement.x = xPositions[deviceType].minutes
     textElement.y = yHourMinutesPosition[deviceType][index];
   })
 
-  digits.seconds.map((element) => {
+  digits.seconds.map((element, index) => {
     const textElement = element as TextElement
+
     textElement.x = xPositions[deviceType].seconds
+    textElement.y = ySecondsPosition[deviceType][index]
   })
 
   if (digits.separator) {
