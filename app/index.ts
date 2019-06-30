@@ -46,7 +46,9 @@ settings.resetUILocks()
 
 // Layout
 layout.setScaleClock(clockDigits)
-layout.setPositionClock(clockDigits)
+layout.setClockPosition(clockDigits)
+layout.setActionContainersPosition()
+layout.setActivitiesPosition()
 
 date.sync()
 

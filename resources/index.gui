@@ -77,10 +77,10 @@
 
     <g id="actions-container">
       <rect id="actions-hours" x="60" y="80" height="80" width="100" fill="red" opacity="0" pointer-events="visible" />
-      <rect id="actions-minutes" x="190" y="80" height="80" width="100" fill="red" opacity="0" pointer-events="visible" />
-      <rect id="actions-date" x="0" y="170" height="80" width="60" fill="red" opacity="0" pointer-events="visible" />
-      <rect id="actions-top-clock" x="60" y="0" height="70" width="240" fill="red" opacity="0" pointer-events="visible" />
-      <rect id="actions-bottom-clock" x="60" y="170" height="90" width="240" fill="red" opacity="0" pointer-events="visible" />
+      <rect id="actions-minutes" x="190" y="80" height="80" width="100" fill="green" opacity="0" pointer-events="visible" />
+      <rect id="actions-date" x="0" y="170" height="80" width="60" fill="yellow" opacity="0" pointer-events="visible" />
+      <rect id="actions-top-clock" x="60" y="0" height="70" width="240" fill="blue" opacity="0" pointer-events="visible" />
+      <rect id="actions-bottom-clock" x="60" y="170" height="90" width="240" fill="white" opacity="0" pointer-events="visible" />
     </g>
   </rect>
 </svg>

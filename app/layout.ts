@@ -1,6 +1,7 @@
 import { me as device } from 'device'
 
 import { FinalType } from '../common/enumerations'
+import document from 'document';
 
 const screen = device.screen || { width: 348, height: 250 }
 
@@ -210,7 +211,150 @@ export const getSecondsPositionY = (index: number) => {
   return vPos[deviceType][index]
 }
 
-export const setPositionClock = (digits: ClockDigits) => {
+export const setActionContainersPosition = () => {
+  const positions: MultiLayoutNestedNumHash = {
+    Ionic: {
+      'actions-hours': { x: 40, y: 80 },
+      'actions-minutes': { x: 190, y: 80 },
+      'actions-date': { x: 0, y: 170 },
+      'actions-top-clock': { x: 60, y: 0 },
+      'actions-bottom-clock': { x: 60, y: 170, width: 240 },
+    },
+    Versa: {
+      'actions-hours': { x: 40, y: 110 },
+      'actions-minutes': { x: 150, y: 110 },
+      'actions-date': { x: 0, y: 220 },
+      'actions-top-clock': { x: 40, y: 0 },
+      'actions-bottom-clock': { x: 60, y: 210, width: 240 },
+    },
+  };
+
+  const devicePos = positions[deviceType];
+
+  [
+    'actions-hours',
+    'actions-minutes',
+    'actions-date',
+    'actions-top-clock',
+    'actions-bottom-clock'
+  ].map((id) => {
+    const element = document.getElementById(id)
+
+    if (element) {
+      const rect = element as RectElement
+
+      rect.x = devicePos[id].x
+      rect.y = devicePos[id].y
+
+      if (typeof devicePos[id].width === 'number') {
+        rect.width = devicePos[id].width
+      }
+    }
+  })
+}
+
+export const setActivitiesPosition = () => {
+  const containerPos: MultiLayoutNestedNumHash = {
+    Ionic: {
+      'activity-1': { x: 55, y: 0 },
+      'activity-2': { x: 55, y: 160 },
+    },
+    Versa: {
+      'activity-1': { x: 55, y: 0 },
+      'activity-2': { x: 55, y: 210 },
+    },
+  }
+
+  const imgPos: MultiLayoutNestedNumHash = {
+    Ionic: {
+      'activity__elevationGain-icon': { x: 60, y: 30 },
+      'activity__hr-icon': { x: 220, y: 30 },
+      'activity__steps-icon': { x: 60, y: 185 },
+      'activity__activeMinutes-icon': { x: 220, y: 185 },
+      'activity__calories-icon': { x: 60, y: 220 },
+      'activity__distance-icon': { x: 190, y: 220 },
+    },
+    Versa: {
+      'activity__elevationGain-icon': { x: 60, y: 30 },
+      'activity__hr-icon': { x: 190, y: 30 },
+      'activity__steps-icon': { x: 60, y: 235 },
+      'activity__activeMinutes-icon': { x: 220, y: 235 },
+      'activity__calories-icon': { x: 60, y: 270 },
+      'activity__distance-icon': { x: 190, y: 270 },
+    },
+  }
+
+  const txtPos: MultiLayoutNestedNumHash = {
+    Ionic: {
+      'activity__elevationGain-text': { x: 90, y: 50 },
+      'activity__hr-text': { x: 250, y: 50 },
+      'activity__steps-text': { x: 90, y: 205 },
+      'activity__activeMinutes-text': { x: 250, y: 205 },
+      'activity__calories-text': { x: 90, y: 240 },
+      'activity__distance-text': { x: 220, y: 240 },
+    },
+    Versa: {
+      'activity__elevationGain-text': { x: 90, y: 50 },
+      'activity__hr-text': { x: 220, y: 50 },
+      'activity__steps-text': { x: 90, y: 255 },
+      'activity__activeMinutes-text': { x: 250, y: 255 },
+      'activity__calories-text': { x: 90, y: 290 },
+      'activity__distance-text': { x: 220, y: 290 },
+    },
+  }
+
+  const containerDevicePos = containerPos[deviceType];
+  const imgDevicePos = imgPos[deviceType];
+  const txtDevicePos = txtPos[deviceType];
+
+  ['activity-1', 'activity-2' ]
+    .map((id) => {
+      const element = document.getElementById(id)
+
+      if (element) {
+        const rect = element as RectElement
+
+        rect.x = containerDevicePos[id].x
+        rect.y = containerDevicePos[id].y
+      }
+    });
+
+  [
+    'activity__elevationGain-icon',
+    'activity__hr-icon',
+    'activity__steps-icon',
+    'activity__activeMinutes-icon',
+    'activity__calories-icon',
+    'activity__distance-icon',
+  ].map((id) => {
+    const element = document.getElementById(id)
+
+    if (element) {
+      const img = element as ImageElement
+      img.x = imgDevicePos[id].x
+      img.y = imgDevicePos[id].y
+    }
+  });
+
+  [
+    'activity__elevationGain-text',
+    'activity__hr-text',
+    'activity__steps-text',
+    'activity__activeMinutes-text',
+    'activity__calories-text',
+    'activity__distance-text',
+  ].map((id) => {
+    const element = document.getElementById(id)
+
+    if (element) {
+      const img = element as TextElement
+      img.x = txtDevicePos[id].x
+      img.y = txtDevicePos[id].y
+    }
+  });
+};
+
+export const setClockPosition = (digits: ClockDigits) => {
   const xySeparator = {
     Ionic: { x: 170, y: 140 },
     Versa: { x: 150, y: 180 },
