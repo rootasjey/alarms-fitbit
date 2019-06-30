@@ -158,7 +158,7 @@ function updateValue(activity: string) {
 }
 
 function updateHR(hr?: HeartRateSensor) {
-  if (!hr)  return
+  if (!hr) return
 
   const textElem = document.getElementById(`activity__hr-text`)
   const iconElem = document.getElementById(`activity__hr-icon`) as ImageElement

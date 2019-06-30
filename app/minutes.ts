@@ -1,9 +1,9 @@
 import document         from 'document'
 
-import { FinalType }    from '../common/enumerations'
 import * as format      from '../common/format'
 import * as animations  from './animations'
 import * as digits      from './digits'
+import * as layout      from './layout'
 import * as seconds     from './seconds'
 import * as settings    from './settings'
 import { Keys }         from './settings'
@@ -50,15 +50,16 @@ export function startAnimation(seconds: number) {
       if (!element) { return }
 
       const startY = element.y
-      const endY = getNextY(startY)
-      const finalType = getNextAnimationType(startY)
+      const endY = layout.getNextY({ type: 'minutes', y: startY})
+      const finalType = layout.getNextAnimationType({ type: 'minutes', y: startY})
+      const resetYto = layout.getResetYTo('minutes')
 
       const animation = animations.createDigitsAnimation({
         startY,
         endY,
         element,
         finalType,
-        resetYto: 390,
+        resetYto,
         hideAfterAnimation: false,
         step: 4,
       })
@@ -87,7 +88,7 @@ export const updateDigitsLazily = (arrDigits: Element[], value: number = 0) => {
   // Subsequent runs
   if (arrDigits.length > 1 && arrDigits[0].text.length > 1) {
     arrDigits.some((digits) => {
-      if (digits.y === 390) {
+      if (digits.y === layout.getResetYTo('minutes')) {
         digits.text = format.formatDigits(currPlusTwoValue)
         return true
       }
@@ -104,38 +105,3 @@ export const updateDigitsLazily = (arrDigits: Element[], value: number = 0) => {
 
   digits.update(arrDigits, [prevValue, value, nextValue, currPlusTwoValue])
 }
-
-/** Returns next animation type according to the current Y coordinate. */
-function getNextAnimationType(y: number) {
-  switch (y) {
-    case 30:
-      return FinalType.hide
-    case 150:
-      return FinalType.background
-    case 270:
-      return FinalType.foreground
-    case 390:
-      return FinalType.background
-
-    default:
-      return FinalType.hide
-  }
-}
-
-/** Returns next Y coordinate according to the current one. */
-function getNextY(y: number) {
-  switch (y) {
-    case 30:
-      return 0
-    case 150:
-      return 30
-    case 270:
-      return 150
-    case 390:
-      return 270
-
-    default:
-      return 390
-  }
-}
-

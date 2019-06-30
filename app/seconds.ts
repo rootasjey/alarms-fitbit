@@ -1,6 +1,5 @@
 import document         from 'document'
 
-import { FinalType }    from '../common/enumerations'
 import * as format      from '../common/format'
 import * as animations  from './animations'
 import * as digits      from './digits'
@@ -18,9 +17,17 @@ export const startAnimation = () => {
       if (!element) return
 
       const startY = element.y
-      const endY = getNextY(startY)
-      const finalType = getNextAnimationType(startY)
-      const animation = animations.createDigitsAnimation({ startY, endY, element, finalType, resetYto: 210 })
+      const endY = layout.getNextY({ type: 'seconds', y: startY })
+      const finalType = layout.getNextAnimationType({ type: 'seconds', y: startY })
+      const resetYto = layout.getResetYTo('seconds')
+
+      const animation = animations.createDigitsAnimation({
+        startY,
+        endY,
+        element,
+        finalType,
+        resetYto,
+      })
 
       animation.start()
     })
@@ -87,7 +94,7 @@ export const updateDigitsLazily = (arrDigits: Element[], value: number = 0) => {
   // Subsequent runs
   if (arrDigits.length > 1 && arrDigits[0].text.length > 1) {
     arrDigits.some((digits) => {
-      if (digits.y === 210) {
+      if (digits.y === layout.getResetYTo('seconds')) {
         digits.text = format.formatDigits(currPlusTwoValue)
         return true
       }
@@ -103,40 +110,6 @@ export const updateDigitsLazily = (arrDigits: Element[], value: number = 0) => {
   const nextValue = format.formatMinSec(value + 1)
 
   digits.update(arrDigits, [prevValue, value, nextValue, currPlusTwoValue])
-}
-
-/** Returns next animation type according to the current Y coordinate. */
-function getNextAnimationType(y: number) {
-  switch (y) {
-    case 120:
-      return FinalType.hide
-    case 150:
-      return FinalType.background
-    case 180:
-      return FinalType.foreground
-    case 210:
-      return FinalType.background
-
-    default:
-      return FinalType.hide
-  }
-}
-
-/** Returns next Y coordinate according to the current one. */
-function getNextY(currentY: number) {
-  switch (currentY) {
-    case 120:
-      return 90
-    case 150:
-      return 120
-    case 180:
-      return 150
-    case 210:
-      return 180
-
-    default:
-      return 210
-  }
 }
 
 /** Reset Y position of seconds visual elements (it desync sometimes). */
@@ -160,6 +133,6 @@ function resetPosition() {
     .map((element, index) => {
       if (!element) return
 
-      element.y = layout.getSecondesPositionY(index)
+      element.y = layout.getSecondsPositionY(index)
     })
 }

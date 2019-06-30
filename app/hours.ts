@@ -6,6 +6,7 @@ import * as animations  from './animations'
 import * as battery     from './battery'
 import * as date        from './date'
 import * as digtis      from './digits'
+import * as layout      from './layout'
 import * as settings    from './settings'
 import { Keys }         from './settings';
 
@@ -52,15 +53,16 @@ export const startAnimation = (minutes: number, seconds: number) => {
       if (!element) { return }
 
       const startY = element.y
-      const endY = getNextY(startY)
-      const finalType = getNextAnimationType(startY)
+      const endY = layout.getNextY({ type: 'hours', y: startY })
+      const finalType = layout.getNextAnimationType({ type: 'hours', y: startY })
+      const resetYto = layout.getResetYTo('hours')
 
       const animation = animations.createDigitsAnimation({
         startY,
         endY,
         element,
         finalType,
-        resetYto: 390,
+        resetYto,
         hideAfterAnimation: false,
         step: 4,
       })
@@ -89,7 +91,7 @@ export const updateDigitsLazily = (arrayDigits: Element[], value: number = 0) =>
   // Subsequent runs
   if (arrayDigits.length > 1 && arrayDigits[0].text.length > 1) {
     arrayDigits.some((digits) => {
-      if (digits.y === 390) {
+      if (digits.y === layout.getResetYTo('hours')) {
         digits.text = format.formatDigits(currPlusTwoValue)
         return true
       }
@@ -105,38 +107,4 @@ export const updateDigitsLazily = (arrayDigits: Element[], value: number = 0) =>
   const nextValue = format.formatHours(value + 1)
 
   digtis.update(arrayDigits, [prevValue, value, nextValue, currPlusTwoValue])
-}
-
-/** Returns next animation type according to the current Y coordinate. */
-function getNextAnimationType(y: number) {
-  switch (y) {
-    case 30:
-      return FinalType.hide
-    case 150:
-      return FinalType.background
-    case 270:
-      return FinalType.foreground
-    case 390:
-      return FinalType.background
-
-    default:
-      return FinalType.hide
-  }
-}
-
-/** Returns next Y coordinate according to the current one. */
-function getNextY(y: number) {
-  switch (y) {
-    case 30:
-      return 0
-    case 150:
-      return 30
-    case 270:
-      return 150
-    case 390:
-      return 270
-
-    default:
-      return 390
-  }
 }

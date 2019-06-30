@@ -8,6 +8,7 @@ import * as battery         from './battery'
 import * as colors          from './colors'
 import * as date            from './date'
 import * as digits          from './digits'
+import * as layout          from './layout'
 import * as hoursUtils      from './hours'
 import * as minutesUtils    from './minutes'
 import * as secondsUtils    from './seconds'
@@ -23,8 +24,12 @@ const clockDigits: ClockDigits = {
   separator: undefined,
 }
 
-const hr = new HeartRateSensor()
-hr.start()
+let hr: HeartRateSensor;
+
+if (HeartRateSensor) {
+  hr = new HeartRateSensor()
+  hr.start()
+}
 
 let displayChanged = true
 
@@ -38,6 +43,10 @@ settings.init((settings: Settings) => {
 })
 
 settings.resetUILocks()
+
+// Layout
+layout.setScaleClock(clockDigits)
+layout.setPositionClock(clockDigits)
 
 date.sync()
 
@@ -95,9 +104,10 @@ clock.ontick = (event: TickEvent) => {
 display.addEventListener('change', (event) => {
   if (display.on) {
     displayChanged = true
-    hr.start()
+
+    if (hr) hr.start()
     return
   }
 
-  hr.stop()
+  if (hr) hr.stop()
 })

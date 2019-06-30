@@ -76,14 +76,14 @@ interface DateElements {
   container: Element | null;
 }
 
+interface Days {
+  [key: number]: 'SUN' | 'MON' | 'TUE' | 'WED' | 'THU' | 'FRI' | 'SAT';
+}
+
 interface FadeAnimationConfig {
   element: Element | null;
   step?: number;
   endValue?: number;
-}
-
-interface ResultAnimationConfig {
-  success: boolean;
 }
 
 interface GetNextOpacityConfig {
@@ -92,30 +92,48 @@ interface GetNextOpacityConfig {
   hideAfterAnimation?: boolean;
 }
 
-interface Days {
-  [key: number] : 'SUN' | 'MON' | 'TUE' | 'WED' | 'THU' | 'FRI' | 'SAT';
-}
-
 interface IntegerHash {
   [key: string]: number;
+}
+
+interface LayoutPositionConfig {
+  type: 'hours' | 'minutes' | 'seconds';
+  y: number;
 }
 
 interface Months {
   [key: number]: 'JAN' | 'FEB' | 'MAR' | 'APR' | 'MAY' | 'JUN' | 'JUL' | 'AUG' | 'SEP' | 'OCT' | 'NOV' | 'DEC';
 }
 
-interface MultiLayoutHash {
+interface MultiLayoutNestedFinalTypeHash {
+  Ionic: {
+    [key: string]: FinalTypeHash;
+  };
+  Versa: {
+    [key: string]: FinalTypeHash;
+  };
+}
+
+interface MultiLayoutNumHash {
   Ionic: IntegerHash;
   Versa: IntegerHash;
 }
 
-interface MultiLayoutNestedHash {
+interface MultiLayoutNestedNumHash {
   Ionic: {
     [key: string]: IntegerHash;
   };
   Versa: {
     [key: string]: IntegerHash;
   };
+}
+
+interface ResultAnimationConfig {
+  success: boolean;
+}
+
+interface FinalTypeHash {
+  [key: string]: FinalType;
 }
 
 interface Settings {
