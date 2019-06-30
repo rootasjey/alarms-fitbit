@@ -49,6 +49,7 @@ layout.setScaleClock(clockDigits)
 layout.setClockPosition(clockDigits)
 layout.setActionContainersPosition()
 layout.setActivitiesPosition()
+layout.setDatePosition()
 
 date.sync()
 

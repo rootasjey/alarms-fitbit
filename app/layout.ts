@@ -223,7 +223,7 @@ export const setActionContainersPosition = () => {
     Versa: {
       'actions-hours': { x: 40, y: 110 },
       'actions-minutes': { x: 150, y: 110 },
-      'actions-date': { x: 0, y: 220 },
+      'actions-date': { x: 0, y: 120 },
       'actions-top-clock': { x: 40, y: 0 },
       'actions-bottom-clock': { x: 60, y: 210, width: 240 },
     },
@@ -353,6 +353,44 @@ export const setActivitiesPosition = () => {
     }
   });
 };
+
+export const setDatePosition = () => {
+  const position: MultiLayoutNestedNumHash = {
+    Ionic: {
+      'date__number'      : { x: 5, y: 190 },
+      'date__day'         : { x: 5, y: 215 },
+      'date__month'       : { x: 5, y: 240 },
+      'date__number-day'  : { x: 5, y: 210 },
+      'date__number-month': { x: 5, y: 240 },
+    },
+    Versa: {
+      'date__number'      : { x: 5, y: 140 },
+      'date__day'         : { x: 5, y: 165 },
+      'date__month'       : { x: 5, y: 190 },
+      'date__number-day'  : { x: 5, y: 150 },
+      'date__number-month': { x: 5, y: 180 },
+    },
+  }
+
+  const devicePos = position[deviceType];
+
+  [
+    'date__number',
+    'date__day',
+    'date__month',
+    'date__number-day',
+    'date__number-month',
+  ].map((id) => {
+    const element = document.getElementById(id)
+
+    if (element) {
+      const txt = element as TextElement
+
+      txt.x = devicePos[id].x
+      txt.y = devicePos[id].y
+    }
+  })
+}
 
 export const setClockPosition = (digits: ClockDigits) => {
   const xySeparator = {
