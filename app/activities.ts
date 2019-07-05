@@ -4,6 +4,7 @@ import { goals, today }     from 'user-activity'
 
 import * as animations      from './animations'
 import * as colors          from './colors'
+import * as permissions     from './permissions'
 import * as settings        from './settings'
 import { Keys }             from './settings'
 
@@ -24,16 +25,19 @@ export const hide = (listNumber: number): Promise<{ action: 'hidden' | 'visible'
 
   const arrayAnimations = []
 
-  list.map((activity) => {
-    const textElem = document.getElementById(`activity__${activity}-text`)
-    const iconElem = document.getElementById(`activity__${activity}-icon`)
-    if (!textElem || !iconElem) return
+  list
+    .filter(permissions.filterAllowedActivities)
+    .map((activity) => {
+      const textElem = document.getElementById(`activity__${activity}-text`)
+      const iconElem = document.getElementById(`activity__${activity}-icon`)
 
-    const animText = animations.fadeOut({ element: textElem})
-    const animIcon = animations.fadeOut({ element: iconElem })
+      if (!textElem || !iconElem) return
 
-    arrayAnimations.push(animText, animIcon)
-  })
+      const animText = animations.fadeOut({ element: textElem})
+      const animIcon = animations.fadeOut({ element: iconElem })
+
+      arrayAnimations.push(animText, animIcon)
+    })
 
   const rectActivities = document.getElementById(`activity-${listNumber}`)
 
@@ -64,17 +68,19 @@ export const show = (listNumber: number): Promise<{ success: boolean, action: 'h
   const animRect = animations.fadeIn({ element: rectActivities })
   arrayAnimations.push(animRect)
 
-  list.map((activity) => {
-    const textElem = document.getElementById(`activity__${activity}-text`)
-    const iconElem = document.getElementById(`activity__${activity}-icon`)
+  list
+    .filter(permissions.filterAllowedActivities)
+    .map((activity) => {
+      const textElem = document.getElementById(`activity__${activity}-text`)
+      const iconElem = document.getElementById(`activity__${activity}-icon`)
 
-    if (!textElem || !iconElem) return
+      if (!textElem || !iconElem) return
 
-    const animText = animations.fadeIn({ element: textElem, endValue: .5 })
-    const animIcon = animations.fadeIn({ element: iconElem, endValue: .5 })
+      const animText = animations.fadeIn({ element: textElem, endValue: .5 })
+      const animIcon = animations.fadeIn({ element: iconElem, endValue: .5 })
 
-    arrayAnimations.push(animText, animIcon)
-  })
+      arrayAnimations.push(animText, animIcon)
+    })
 
   return Promise.all(arrayAnimations)
     .then((result) => {
@@ -90,16 +96,20 @@ export const showConditional = () => {
 
 export const sync = (hr?: HeartRateSensor) => {
   if (settings.getValue(Keys.displayActivities)) {
-    ACTIVITIES_LIST.map((activity) => {
-      if (activity === 'hr') { updateHR(hr); return }
-      updateValue(activity)
-    })
+    ACTIVITIES_LIST
+      .filter(permissions.filterAllowedActivities)
+      .map((activity) => {
+        if (activity === 'hr') { updateHR(hr); return }
+        updateValue(activity)
+      })
   }
 
   if (settings.getValue(Keys.displayActivities2)) {
-    ACTIVITIES_LIST2.map((activity) => {
-      updateValue(activity)
-    })
+    ACTIVITIES_LIST2
+      .filter(permissions.filterAllowedActivities)
+      .map((activity) => {
+        updateValue(activity)
+      })
   }
 }
 

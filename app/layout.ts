@@ -1,7 +1,7 @@
 import { me as device } from 'device'
+import document         from 'document';
 
-import { FinalType } from '../common/enumerations'
-import document from 'document';
+import { FinalType }    from '../common/enumerations'
 
 // Variables declaration
 // ~~~~~~~~~~~~~~~~~~~~~

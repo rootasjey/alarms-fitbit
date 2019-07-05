@@ -34,6 +34,10 @@ interface BatteryLevels {
   circle3: number;
 }
 
+interface BooleanHash {
+  [key: string]: boolean;
+}
+
 interface ClockDigits {
   hours: Element[];
   minutes: Element[];
