@@ -39,7 +39,8 @@ date.initElements()
 battery.initElements()
 
 settings.init((settings: Settings) => {
-  // console.log('settings chnged')
+  colors.setForegroundColor(settings.foregroundColor)
+  colors.setDigitsColors(clockDigits)
 })
 
 settings.resetUILocks()

@@ -147,6 +147,7 @@ interface Settings {
   displayActivities2: boolean;
   displayBatteryDate: boolean;
   displaySeconds: boolean;
+  foregroundColor: string;
   isBottomDigitTapOn: boolean;
   isHoursTapOn: boolean;
   isMinutesTapOn: boolean;

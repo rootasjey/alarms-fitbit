@@ -10,9 +10,6 @@ import * as messaging from 'messaging'
 const SETTINGS_TYPE = 'cbor'
 const SETTINGS_FILE = 'settings.cbor'
 
-// const KEY_TEMPERATURE_UNIT = 'imperialUnit'
-// const KEY_MANUAL_LOCATION = 'manualLocation'
-
 export enum DateFormat {
   dateMonth = 'dateMonth',
   dayDateMonth = 'dayDateMonth',
@@ -38,6 +35,7 @@ let settings: Settings = {
   displayActivities2  : false,
   displayBatteryDate  : false,
   displaySeconds      : true,
+  foregroundColor     : '',
   isBottomDigitTapOn  : true,
   isHoursTapOn        : true,
   isMinutesTapOn      : true,
@@ -50,6 +48,7 @@ const settingsDefaultValues: Settings = {
   displayActivities2  : false,
   displayBatteryDate  : false,
   displaySeconds      : true,
+  foregroundColor     : '',
   isBottomDigitTapOn  : true,
   isHoursTapOn        : true,
   isMinutesTapOn      : true,
@@ -96,15 +95,6 @@ export const setValue = (config: SettingsUpdateConfig) => {
 messaging.peerSocket.addEventListener('message', function (evt) {
   settings[evt.data.key] = evt.data.value
   onsettingschange(settings)
-
-  // // Update immediately weather value when unit changed
-  // if (evt.data.key === KEY_TEMPERATURE_UNIT) {
-  //   initMetric({ activityName: 'weather' })
-  // }
-
-  // if (evt.data.key === KEY_MANUAL_LOCATION) {
-  //   initMetric({ activityName: 'weather', useFreshData: true })
-  // }
 })
 
 // Register for the unload event
