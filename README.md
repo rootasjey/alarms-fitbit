@@ -2,6 +2,8 @@
 
 A Fitbit clock face looking like the Alarms app.
 
+![screenshot1.png](./screenshots/screenshot1.png)
+
 ## Features
 
 It can be very minimalistic with only hours & minutes displayed or you can have seconds & activities.
