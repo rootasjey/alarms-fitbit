@@ -39,6 +39,8 @@ date.initElements()
 battery.initElements()
 
 settings.init((settings: Settings) => {
+  if (!settings.foregroundColor) return
+
   colors.setForegroundColor(settings.foregroundColor)
   colors.setDigitsColors(clockDigits)
 })

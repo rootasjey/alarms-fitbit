@@ -59,3 +59,6 @@ jspm_packages/
 
 # fitbit build
 *.fba
+
+# macOS files
+.DS_Store

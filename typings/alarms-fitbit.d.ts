@@ -84,6 +84,12 @@ interface Days {
   [key: number]: 'SUN' | 'MON' | 'TUE' | 'WED' | 'THU' | 'FRI' | 'SAT';
 }
 
+interface Element extends ElementSearch, GlobalEvents {
+  style: any;
+  x: number;
+  y: number;
+}
+
 interface FadeAnimationConfig {
   element: Element | null;
   step?: number;
@@ -94,6 +100,10 @@ interface GetNextOpacityConfig {
   currentOpacity: number;
   finalType: FinalType;
   hideAfterAnimation?: boolean;
+}
+
+interface Goals2 extends EventTarget<{ reachgoal: Event }> {
+  [key: string]: any;
 }
 
 interface IntegerHash {

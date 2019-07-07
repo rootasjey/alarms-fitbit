@@ -93,7 +93,9 @@ export const setValue = (config: SettingsUpdateConfig) => {
 
 // Received message containing settings data
 messaging.peerSocket.addEventListener('message', function (evt) {
-  settings[evt.data.key] = evt.data.value
+  const { key, value } = evt.data
+
+  settings[key] = value
   onsettingschange(settings)
 })
 

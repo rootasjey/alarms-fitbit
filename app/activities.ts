@@ -153,7 +153,7 @@ function updateValue(activity: string) {
 
   // @ts-ignore
   const value: number = today.local[activity] ? today.local[activity] : 0
-  const goalValue: number = goals[activity] ? goals[activity] : 0
+  const goalValue: number = (goals[activity] ? goals[activity] : 0) as number
 
   textElem.text = value > 1000000 ? `${value / 1000000}M` : `${value}`
 

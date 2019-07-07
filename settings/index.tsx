@@ -8,14 +8,33 @@ function settingsComponent(props: SettingsComponentProps) {
         }
       >
         <Text>
-          Thank you using Alarms ! ❤️
+          Thank you for using Alarms ! ❤️
         </Text>
       </Section>
 
       <Section
         title={<Text bold align="center">Theme Color</Text>}>
 
-        <Text>This will change the clock's color</Text>
+        <Text>You can customize the color only if you have a valid unlock code.</Text>
+
+        <Text>
+          To get an unlock code, you have to donate at least $1 via <Link source='https://paypal.me/rootasjey'>Paypal</Link>.
+        </Text>
+
+        <Text>
+          Then send <Link source='mailto:jeremiecorpinot@outlook.com'>me an email</Link> with the '[Alarms-fitbit] Code' subject in which you specify the amount given.
+          I'll respond with the code and you'll be able to enter it in the field below.
+        </Text>
+
+        <Text>
+          Once you enter and validate the code by taping on the 'save' button, selecting colors below will take effect.
+        </Text>
+
+        <TextInput
+          placeholder="Unlock Code"
+          settingsKey="unlockCode"
+          title="Unlock Code"
+        />
 
         <ColorSelect
           settingsKey="foregroundColor"
@@ -38,6 +57,12 @@ function settingsComponent(props: SettingsComponentProps) {
         />
       </Section>
 
+      <Section title={<Text bold align="center">Help</Text>}>
+        <Text>
+          You can read the <Link source="https://github.com/rootasjey/alarms-fitbit">GitHub's readme page.</Link>
+        </Text>
+      </Section>
+
       <Section title={<Text bold align="center">Contact</Text>}>
         <Text>
           You can contact me on <Link source='https://twitter.com/jeremiecorpinot'>Twitter </Link>
@@ -46,12 +71,6 @@ function settingsComponent(props: SettingsComponentProps) {
 
         <Text>
           You can ask there for a <Link source="https://github.com/rootasjey/alarms-fitbit/issues/new"> new feature or report an issue</Link>.
-        </Text>
-      </Section>
-
-      <Section title={<Text bold align="center">Support</Text>}>
-        <Text>
-          Please support the app on <Link source='https://paypal.me/rootasjey'>Paypal</Link> if you enjoy using it.
         </Text>
       </Section>
 
