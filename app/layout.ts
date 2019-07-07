@@ -180,6 +180,15 @@ export const getBatteryPositionY = (chargeLevel: number, charging: boolean) => {
   return deviceBatteryVPos[vLayout]
 }
 
+export const getMiddleHoursMinutesY = () => {
+  const pos = {
+    Ionic: 150,
+    Versa: 180,
+  }
+
+  return pos[deviceType];
+}
+
 /** Returns next animation type according to the current Y coordinate. */
 export const getNextAnimationType = (config: LayoutPositionConfig): FinalType => {
   const { type, y } = config

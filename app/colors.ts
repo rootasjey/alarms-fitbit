@@ -1,3 +1,5 @@
+import * as layout from './layout'
+
 const COLORS = {
   foreground: '#f1c40f',
   background: '#ffffff',
@@ -23,7 +25,7 @@ export const setDigitsColors = (clockDigits: ClockDigits) => {
  * @param element DOM element to set the color if it's the middle one.
  */
 function setColorOnMiddleHourMinutes (element: Element) {
-  if (element.y === 150) {
+  if (element.y === layout.getMiddleHoursMinutesY()) {
     element.style.fill = COLORS.foreground
     return true
   }
