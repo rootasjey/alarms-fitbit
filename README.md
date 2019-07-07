@@ -38,7 +38,7 @@ This clock face is compatible with:
 | ![screenshot1.png](./screenshots/screenshot3.png) | ![screenshot2.png](./screenshots/screenshot4.png) |
 
 | Versa | ... |
-|-------|------|
+|-------|:------:|
 | ![screenshot versa 1](./screenshots/screenshot-versa1.png) | ![screenshot versa 2](./screenshots/screenshot-versa2.png) |
 
 ## Help
