@@ -5,7 +5,7 @@ import * as messaging from 'messaging'
 
 import sha256 from 'crypto-js/sha256'
 
-const UNLOCK_CODE_HASH = '2b58d75d7ffde47141c31aac0c8b5eeb548206e61b5cad8d9ced6e573c28d966'
+const UNLOCK_CODE_HASH = '4dea5c7cb70f50322ec9d734aa4aa078be9227c05251e18991c596f387552370'
 
 const KEYS_SETTINGS = [
   'foregroundColor',
