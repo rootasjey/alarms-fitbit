@@ -170,7 +170,23 @@ const secondsPositionY: MultiLayoutNumHash = {
   }
 }
 
+const minutesHoursPositionY: MultiLayoutNumHash = {
+  Ionic: {
+    0: 30,
+    1: 150,
+    2: 270,
+    3: 390,
+  },
+  Versa: {
+    0: 40,
+    1: 180,
+    2: 320,
+    3: 460,
+  }
+}
+
 const deviceSecondsPositionY = secondsPositionY[deviceType]
+const deviceMinutesHoursPositionY = minutesHoursPositionY[deviceType]
 
 // Exports
 // ~~~~~~~~~~~~~~~~~~~~~
@@ -211,6 +227,10 @@ export const getResetYTo = (type: 'hours' | 'minutes' | 'seconds') => {
 
 export const getSecondsPositionY = (index: number) => {
   return deviceSecondsPositionY[index]
+}
+
+export const getMinutesHoursPositionY = (index: number) => {
+  return deviceMinutesHoursPositionY[index]
 }
 
 export const setActionContainersPosition = () => {

@@ -44,6 +44,8 @@ export const addTapEvent = () => {
 export function startAnimation(seconds: number) {
   if (seconds !== 59) { return }
 
+  resetPosition();
+
   [0, 1, 2, 3]
     .map((n) => {
       const element = document.getElementById(`minutes-digits-${n}`)
@@ -104,4 +106,29 @@ export const updateDigitsLazily = (arrDigits: Element[], value: number = 0) => {
   const nextValue = format.formatMinSec(value + 1)
 
   digits.update(arrDigits, [prevValue, value, nextValue, currPlusTwoValue])
+}
+
+/** Reset Y position of visual elements (it desync sometimes). */
+function resetPosition() {
+  [0, 1, 2, 3]
+    .map((n) => {
+      return document.getElementById(`minutes-digits-${n}`)
+    })
+    .sort((a, b) => {
+      if (!a || !b) return 0
+
+      const aValue = parseInt(a.text)
+      const bValue = parseInt(b.text)
+
+      // NOTE: Special case 59 -> 0
+      if (aValue > 55 && bValue < 4) return -1
+      if (aValue < 4 && bValue > 55) return 1
+
+      return aValue - bValue
+    })
+    .map((element, index) => {
+      if (!element) return
+
+      element.y = layout.getMinutesHoursPositionY(index)
+    })
 }
